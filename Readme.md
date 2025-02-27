@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов»
 
 * Студент: [Kseniia Lazarov](https://up.htmlacademy.ru/nodejs-api/9/user/2384991).
-* Наставник: `Неизвестно`.
+* Наставник: [Константин Ильин](https://htmlacademy.ru/profile/id2374827).
 
 ---
 
