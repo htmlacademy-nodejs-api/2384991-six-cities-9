@@ -8,4 +8,4 @@ export class ImportCommand implements Command {
     public execute(...parameters: string[]): void {
         //  imports data from *.tsv-file. The result of the import command should be output to the console.
     }
-}
+};
