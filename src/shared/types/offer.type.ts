@@ -11,8 +11,8 @@ export type Offer = {
 	premium: boolean;
 	favorite: boolean;
 	rating: number;
-	type: string;
-	rooms: RoomType;
+	type: RoomType;
+	roomsNumber: number;
 	guests: number;
 	price: number;
 	services: string[];
