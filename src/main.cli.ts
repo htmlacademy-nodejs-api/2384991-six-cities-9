@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { CLIApplication, HelpCommand, VersionCommand, ImportCommand } from "./cli/index.js";
 
 const bootstrap = () => {
@@ -8,7 +9,6 @@ const bootstrap = () => {
         new VersionCommand(),
         new ImportCommand()
     ]);
-	console.log('Аргументы process.argv:', process.argv);
     cliApplication.processCommand(process.argv);
 };
 
