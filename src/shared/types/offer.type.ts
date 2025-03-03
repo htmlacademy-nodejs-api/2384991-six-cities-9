@@ -1,6 +1,5 @@
 import { User, RoomType, City } from './index.js';
 
-
 export type Offer = {
 	offerName: string;
 	description: string;

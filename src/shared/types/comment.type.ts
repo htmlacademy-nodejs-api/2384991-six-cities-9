@@ -3,4 +3,4 @@ export type Comment = {
 	publicationDate: string;
 	rating: number;
 	author: string;
-} 
+}

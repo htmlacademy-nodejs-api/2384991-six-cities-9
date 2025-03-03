@@ -4,4 +4,4 @@ export type User = {
 	avatarPath?: string;
 	password: string;
 	userType: 'standart' | 'pro';
-  }
+}
