@@ -32,6 +32,8 @@
     "npm": "^10"
   },
   "dependencies": {
-    "chalk": "5.4.1"
+    "chalk": "5.4.1",
+    "got": "14.2.1",
+    "json-server": "0.17.3"
   }
 }
