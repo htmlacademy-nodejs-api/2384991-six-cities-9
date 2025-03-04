@@ -88,7 +88,7 @@ export class TSVFileReader implements FileReader {
   }
 
   private parseBoolean(value: string): boolean {
-    return value === 'true' ? true : false;
+    return value === 'true';
   }
 
   private parseDate(value: string): Date {

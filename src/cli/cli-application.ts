@@ -11,11 +11,11 @@ export class CLIApplication {
       if (this.commands[command.getName()]) {
         throw new Error(`Command ${command.getName()} is already registered!`);
       }
-  
+
       this.commands[command.getName()] = command;
     });
   }
-  
+
   public getCommand(commandName: string): Command {
     return this.commands[commandName] ?? this.getDefaultCommand();
   }

@@ -8,7 +8,7 @@ export class ImportCommand implements Command {
 
   public execute(...parameters: string[]): void {
     const [filename] = parameters;
-    
+
     if (!filename) {
       console.error('Error: No filename provided for import.');
       return;
