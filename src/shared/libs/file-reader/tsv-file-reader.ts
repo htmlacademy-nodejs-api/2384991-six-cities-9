@@ -2,6 +2,9 @@ import { readFileSync } from 'node:fs';
 import { FileReader } from './file-reader.interface.js';
 import { Offer, City, RoomType, User } from '../../types/index.js';
 
+const DELIMITER = ';';
+const RADIX = 10;
+
 export class TSVFileReader implements FileReader {
   private rawData = '';
 
@@ -16,7 +19,7 @@ export class TSVFileReader implements FileReader {
   private parseRawDataToOffers(): Offer[] {
     return this.rawData
       .split('\n')
-      .filter((row) => row.trim().length > 0)
+      .filter((row) => row.trim())
       .map((line) => this.parseLineToOffer(line));
   }
 
@@ -28,26 +31,26 @@ export class TSVFileReader implements FileReader {
       city,
       previewImage,
       images,
-      premium,
-      favorite,
+      isPremium,
+      isFavorite,
       rating,
       type,
       roomsNumber,
       guests,
       price,
       services,
-      host,
+      author,
       commentsNumber,
-      langitude,
+      longitude,
       latitude
     ] = line.split('\t');
 
-    const [name, email, avatarPath, password, userType] = host.split(';');
+    const [name, email, avatarPath, password, userType] = author.split(';');
 
-    const parsedHost: User = {
+    const parsedAuthor: User = {
       name,
       email,
-      avatarPath: avatarPath || undefined,
+      avatarPath: avatarPath,
       password,
       userType: userType as 'standart' | 'pro'
     };
@@ -55,51 +58,45 @@ export class TSVFileReader implements FileReader {
     return {
       offerName,
       description,
-      publicationDate: new Date(publicationDate),
+      publicationDate: this.parseDate(publicationDate),
       city: City[city as keyof typeof City],
       previewImage,
-      images: this.parseImages(images),
-      premium: premium === 'true',
-      favorite: favorite === 'true',
-      rating: this.parseRating(rating),
+      images: this.parseArray(images),
+      isPremium: this.parseBoolean(isPremium),
+      isFavorite: this.parseBoolean(isFavorite),
+      rating: this.parseNumber(rating),
       type: RoomType[type as keyof typeof RoomType],
-      roomsNumber: this.parseRooms(roomsNumber),
-      guests: this.parseGuests(guests),
-      price: this.parsePrice(price),
-      services: this.parseServices(services),
-      host: parsedHost,
-      commentsNumber: this.parseCommentsNumber(commentsNumber),
-      langitude,
-      latitude
+      roomsNumber: this.parseNumber(roomsNumber),
+      guests: this.parseNumber(guests),
+      price: this.parseNumber(price),
+      services: this.parseArray(services),
+      author: parsedAuthor,
+      commentsNumber: this.parseNumber(commentsNumber),
+      location: {
+        longitude: this.parseNumber(longitude),
+        latitude: this.parseNumber(latitude)
+      }
     };
   }
 
-  private parseImages(imagesString: string): string[] {
-    return imagesString.split(';');
+  private parseArray(value: string): string[] {
+    return value.split(DELIMITER);
   }
 
-  private parseRating(ratingString: string): number {
-    return parseFloat(ratingString);
+  private parseNumber(value: string): number {
+    return parseInt(value, RADIX);
   }
 
-  private parseRooms(roomsString: string): number {
-    return parseInt(roomsString, 10);
+  private parseBoolean(value: string): boolean {
+    return value === 'true' ? true : false;
   }
 
-  private parseGuests(guestsString: string): number {
-    return parseInt(guestsString, 10);
-  }
-
-  private parsePrice(priceString: string): number {
-    return parseInt(priceString, 10);
-  }
-
-  private parseServices(servicesString: string): string[] {
-    return servicesString.split(';');
-  }
-
-  private parseCommentsNumber(commentsString: string): number {
-    return parseInt(commentsString, 10);
+  private parseDate(value: string): Date {
+    const date = new Date(value);
+    if (isNaN(date.getTime())) {
+      throw new Error(`Invalid date format: ${value}`);
+    }
+    return date;
   }
 
   read(): void {
