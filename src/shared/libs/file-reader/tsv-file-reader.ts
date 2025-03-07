@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { FileReader } from './file-reader.interface.js';
-import { Offer, City, RoomType, User } from '../../types/index.js';
+import { Offer, City, RoomType, User, Services } from '../../types/index.js';
 
 const DELIMITER = ';';
 const RADIX = 10;
@@ -69,7 +69,7 @@ export class TSVFileReader implements FileReader {
       roomsNumber: this.parseNumber(roomsNumber),
       guests: this.parseNumber(guests),
       price: this.parseNumber(price),
-      services: this.parseArray(services),
+      services: this.parseArray(services).map((service) => Services[service as keyof typeof Services]),
       author: parsedAuthor,
       commentsNumber: this.parseNumber(commentsNumber),
       location: {
@@ -78,6 +78,7 @@ export class TSVFileReader implements FileReader {
       }
     };
   }
+
 
   private parseArray(value: string): string[] {
     return value.split(DELIMITER);

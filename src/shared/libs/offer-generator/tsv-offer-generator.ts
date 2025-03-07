@@ -1,8 +1,8 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 
-import { OfferGenerator } from "./offer-generator.interface.js";
-import { MockServerData, Offer } from "../../types/index.js";
-import { generateRandomValue, getRandomItem, getRandomItems } from "../../helpers/common.js";
+import { OfferGenerator } from './offer-generator.interface.js';
+import { MockServerData } from '../../types/index.js';
+import { generateRandomValue, getRandomItem, getRandomItems } from '../../helpers/common.js';
 
 const MIN_PRICE = 100;
 const MAX_PRICE = 100000;
@@ -24,7 +24,7 @@ export class TSVOfferGenerator implements OfferGenerator {
   public generate(): string {
     const offerName = getRandomItem(this.mockData.offerNames);
     const description = getRandomItem(this.mockData.descriptions);
-    const cities = getRandomItem(this.mockData.cities);
+    const city = getRandomItem(this.mockData.cities);
     const previewImage = getRandomItem(this.mockData.previewImages);
     const images = getRandomItems(this.mockData.images);
     const isPremium = generateRandomValue(0, 1) === 1;
@@ -37,16 +37,17 @@ export class TSVOfferGenerator implements OfferGenerator {
     const services = getRandomItems(this.mockData.services);
     const author = getRandomItem(this.mockData.users);
     const commentsNumber = generateRandomValue(MIN_COMMENT_COUNT, MAX_COMMENT_COUNT);
-    
-    const publicationDate = dayjs()
-    .subtract(generateRandomValue(FIRST_WEEK_DAY, LAST_WEEK_DAY), 'day')
-    .toISOString();
-    
+    const location = getRandomItem(this.mockData.locaations);
+    const longitude = location.longitude.toFixed(6);
+    const latitude = location.latitude.toFixed(6);
+
+    const publicationDate = dayjs().subtract(generateRandomValue(FIRST_WEEK_DAY, LAST_WEEK_DAY), 'day').toISOString();
+
     return [
       offerName,
       description,
       publicationDate,
-      cities,
+      city,
       previewImage,
       images,
       isPremium,
@@ -58,7 +59,9 @@ export class TSVOfferGenerator implements OfferGenerator {
       price,
       services,
       author,
-      commentsNumber
+      commentsNumber,
+      longitude,
+      latitude
     ].join('\t');
   }
 }
