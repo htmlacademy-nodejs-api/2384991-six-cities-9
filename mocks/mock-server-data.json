@@ -1,0 +1,103 @@
+{
+  "api": {
+    "offerNames": [
+      "Luxury Loft",
+      "Cozy Cabin in the Woods",
+      "Beachfront Villa",
+      "Modern Apartment",
+      "Mountain Retreat",
+      "Charming Studio"
+    ],
+    "descriptions": [
+      "A stylish and spacious loft located in the heart of the city.",
+      "A quiet retreat surrounded by nature, perfect for relaxation.",
+      "A stunning villa with direct access to the beach and ocean views.",
+      "A modern apartment in the city center, ideal for business travelers.",
+      "A cozy cabin with breathtaking mountain views.",
+      "A compact but charming studio"
+    ],
+    "cities": [
+      "Paris",
+      "Cologne",
+      "Brussels",
+      "Amsterdam",
+      "Hamburg",
+      "Dusseldorf"
+    ],
+    "previewImages": [
+      "https://picsum.photos/600/400",
+      "https://picsum.photos/600/400",
+      "https://picsum.photos/600/400",
+      "https://picsum.photos/600/400",
+      "https://picsum.photos/600/400",
+      "https://picsum.photos/600/400"
+    ],
+    "images": [
+      "https://picsum.photos/600/400",
+      "https://picsum.photos/600/400",
+      "https://picsum.photos/600/400",
+      "https://picsum.photos/600/400",
+      "https://picsum.photos/600/400",
+      "https://picsum.photos/600/400"
+    ],
+    "roomTypes": [
+      "Apartment",
+      "House",
+      "Room",
+      "Hotel"
+    ],
+    "services": [
+      "Breakfast",
+      "Air conditioning",
+      "Laptop friendly workspace",
+      "Baby seat",
+      "Washer",
+      "Towels",
+      "Fridge"
+    ],
+    "users": [
+      "John Doe",
+      "Emma Smith",
+      "Liam Brown",
+      "Olivia Johnson",
+      "William Davis",
+      "Sophia Martinez"
+    ],
+    "emails": [
+      "john.doe@example.com",
+      "emma.smith@example.com",
+      "liam.brown@example.com",
+      "olivia.johnson@example.com",
+      "william.davis@example.com",
+      "sophia.martinez@example.com"
+    ],
+    "passwords": [
+      "password1",
+      "password2",
+      "password3",
+      "password4",
+      "password5",
+      "password6"
+    ],
+    "avtarPaths": [
+      "https://picsum.photos/200/200",
+      "https://picsum.photos/200/200",
+      "https://picsum.photos/200/200",
+      "https://picsum.photos/200/200",
+      "https://picsum.photos/200/200",
+      "https://picsum.photos/200/200"
+    ],
+    "userTypes": [
+      "standard",
+      "pro"
+    ],
+    "locaations": [
+      { "longitude": 2.3522, "latitude": 48.8566 },
+      { "longitude": -123.1216, "latitude": 49.2827 },
+      { "longitude": 115.1889, "latitude": -8.4095 },
+      { "longitude": -74.006, "latitude": 40.7128 },
+      { "longitude": 8.5417, "latitude": 47.3769 },
+      { "longitude": 139.6917, "latitude": 35.6895 }
+    ]
+  }
+}
