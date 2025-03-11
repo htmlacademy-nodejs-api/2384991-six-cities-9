@@ -3,8 +3,7 @@ import { createReadStream } from 'node:fs';
 import { FileReader } from './file-reader.interface.js';
 import { Offer, City, RoomType, User, Services } from '../../types/index.js';
 
-const DELIMITER = ';';
-const RADIX = 10;
+const DELIMITER = ',';
 
 export class TSVFileReader extends EventEmitter implements FileReader {
   private CHUNK_SIZE = 16384;
@@ -29,14 +28,18 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       guests,
       price,
       services,
-      author,
+      name,
+      email,        
+      password,    
+      avatarPath,  
+      userType,      
       commentsNumber,
       longitude,
       latitude
     ] = line.split('\t');
-
-    const [name, email, avatarPath, password, userType] = author.split(';');
-
+    console.log('type', type);
+    console.log('services', services);
+   
     const parsedAuthor: User = {
       name,
       email,
@@ -55,7 +58,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       isPremium: this.parseBoolean(isPremium),
       isFavorite: this.parseBoolean(isFavorite),
       rating: this.parseNumber(rating),
-      type: RoomType[type as keyof typeof RoomType],
+      type: RoomType[type.toLowerCase() as keyof typeof RoomType],
       roomsNumber: this.parseNumber(roomsNumber),
       guests: this.parseNumber(guests),
       price: this.parseNumber(price),
@@ -75,7 +78,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
   }
 
   private parseNumber(value: string): number {
-    return parseInt(value, RADIX);
+    return parseFloat(value);
   }
 
   private parseBoolean(value: string): boolean {

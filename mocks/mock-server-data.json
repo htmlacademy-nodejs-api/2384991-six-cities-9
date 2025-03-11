@@ -48,9 +48,9 @@
     ],
     "services": [
       "Breakfast",
-      "Air conditioning",
-      "Laptop friendly workspace",
-      "Baby seat",
+      "AirConditioning",
+      "LaptopFriendlyWorkspace",
+      "BabySeat",
       "Washer",
       "Towels",
       "Fridge"
@@ -79,7 +79,7 @@
       "password5",
       "password6"
     ],
-    "avtarPaths": [
+    "avatarPaths": [
       "https://picsum.photos/200/200",
       "https://picsum.photos/200/200",
       "https://picsum.photos/200/200",
@@ -91,13 +91,13 @@
       "standard",
       "pro"
     ],
-    "locaations": [
-      { "longitude": 2.3522, "latitude": 48.8566 },
-      { "longitude": -123.1216, "latitude": 49.2827 },
-      { "longitude": 115.1889, "latitude": -8.4095 },
-      { "longitude": -74.006, "latitude": 40.7128 },
-      { "longitude": 8.5417, "latitude": 47.3769 },
-      { "longitude": 139.6917, "latitude": 35.6895 }
+    "locations": [
+      { "longitude": 2.3522, "latitude": 48.8584 }, 
+      { "longitude": 6.9644, "latitude": 50.9352 },   
+      { "longitude": 4.3572, "latitude": 50.8503 },   
+      { "longitude": 4.8994, "latitude": 52.3740 },  
+      { "longitude": 10.0150, "latitude": 53.5511 },  
+      { "longitude": 6.7821, "latitude": 51.2277 }   
     ]
   }
 }

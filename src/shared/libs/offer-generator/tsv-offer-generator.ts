@@ -36,8 +36,12 @@ export class TSVOfferGenerator implements OfferGenerator {
     const price = generateRandomValue(MIN_PRICE, MAX_PRICE);
     const services = getRandomItems(this.mockData.services);
     const author = getRandomItem(this.mockData.users);
+    const email = getRandomItem(this.mockData.emails);
+    const password = getRandomItem(this.mockData.passwords);
+    const avatarPath = getRandomItem(this.mockData.avatarPaths);
+    const userType = getRandomItem(this.mockData.userTypes);
     const commentsNumber = generateRandomValue(MIN_COMMENT_COUNT, MAX_COMMENT_COUNT);
-    const location = getRandomItem(this.mockData.locaations);
+    const location = getRandomItem(this.mockData.locations);
     const longitude = location.longitude.toFixed(6);
     const latitude = location.latitude.toFixed(6);
 
@@ -59,6 +63,10 @@ export class TSVOfferGenerator implements OfferGenerator {
       price,
       services,
       author,
+      email,
+      password,
+      avatarPath,
+      userType,
       commentsNumber,
       longitude,
       latitude
