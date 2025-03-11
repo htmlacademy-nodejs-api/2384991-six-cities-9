@@ -5,8 +5,8 @@ export class TSVFileWriter implements FileWriter {
   private stream: WriteStream;
 
   constructor(filename: string) {
-    this.stream = createWriteStream(filename, { 
-      flags: 'w',  
+    this.stream = createWriteStream(filename, {
+      flags: 'w',
       encoding: 'utf-8',
       autoClose: true
     });
