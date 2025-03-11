@@ -37,9 +37,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       longitude,
       latitude
     ] = line.split('\t');
-    console.log('type', type);
-    console.log('services', services);
-   
+
     const parsedAuthor: User = {
       name,
       email,
