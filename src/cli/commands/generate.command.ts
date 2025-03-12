@@ -30,7 +30,7 @@ export class GenerateCommand implements Command {
 
   public async execute(...parameters: string[]): Promise<void> {
     if (parameters.length < 3) {
-      console.error("Invalid parameters. Expected: <count> <filepath> <url>");
+      console.error('Invalid parameters. Expected: <count> <filepath> <url>');
       return;
     }
 
