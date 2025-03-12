@@ -29,8 +29,25 @@ export class GenerateCommand implements Command {
   }
 
   public async execute(...parameters: string[]): Promise<void> {
+    if (parameters.length < 3) {
+      console.error("Invalid parameters. Expected: <count> <filepath> <url>");
+      return;
+    }
+
     const [ count, filepath, url ] = parameters;
     const offerCount = Number.parseInt(count, 10);
+
+    if (isNaN(offerCount) || offerCount <= 0) {
+      console.error(`Invalid count: "${count}". It should be a positive number.`);
+      return;
+    }
+
+    try {
+      new URL(url);
+    } catch {
+      console.error(`Invalid URL: "${url}". Please provide a valid URL.`);
+      return;
+    }
 
     try {
       await this.load(url);

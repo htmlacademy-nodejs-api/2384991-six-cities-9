@@ -6,7 +6,7 @@ import { Offer, City, RoomType, User, Services } from '../../types/index.js';
 const DELIMITER = ',';
 
 export class TSVFileReader extends EventEmitter implements FileReader {
-  private CHUNK_SIZE = 16384;
+  private readonly CHUNK_SIZE = 16384;
 
   constructor(private readonly filename: string) {
     super();
@@ -21,7 +21,6 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       previewImage,
       images,
       isPremium,
-      isFavorite,
       rating,
       type,
       roomsNumber,
@@ -54,7 +53,6 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       previewImage,
       images: this.parseArray(images),
       isPremium: this.parseBoolean(isPremium),
-      isFavorite: this.parseBoolean(isFavorite),
       rating: this.parseNumber(rating),
       type: RoomType[type.toLowerCase() as keyof typeof RoomType],
       roomsNumber: this.parseNumber(roomsNumber),

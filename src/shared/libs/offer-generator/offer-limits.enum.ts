@@ -1,0 +1,14 @@
+export enum OfferLimits {
+  MIN_PRICE = 100,
+  MAX_PRICE = 100000,
+  MIN_ROOMS = 1,
+  MAX_ROOMS = 8,
+  MIN_GUESTS = 1,
+  MAX_GUESTS = 10,
+  MIN_RATING = 1,
+  MAX_RATING = 5,
+  MIN_COMMENT_COUNT = 0,
+  MAX_COMMENT_COUNT = 50,
+  FIRST_WEEK_DAY = 1,
+  LAST_WEEK_DAY = 7
+}
