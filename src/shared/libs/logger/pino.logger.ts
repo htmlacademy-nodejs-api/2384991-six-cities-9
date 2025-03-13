@@ -13,7 +13,7 @@ export class PinoLogger implements Logger {
 
     const multiTransport = transport({
       targets: [
-        {        
+        {
           target: 'pino/file',
           options: { destination },
           level: 'debug'
@@ -24,7 +24,6 @@ export class PinoLogger implements Logger {
           level: 'info',
         }
       ]
-
     });
 
     this.logger = pino({}, multiTransport);
@@ -39,10 +38,10 @@ export class PinoLogger implements Logger {
   }
 
   public info(message: string, ...args: unknown[]): void {
-    this.logger.info(message, ...args)
+    this.logger.info(message, ...args);
   }
 
   public debug(message: string, ...args: unknown[]): void {
-    this.logger.debug(message, ...args)
+    this.logger.debug(message, ...args);
   }
 }

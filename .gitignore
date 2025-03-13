@@ -6,6 +6,7 @@
 /docs/
 .idea/*
 .env
+/logs
 
 .DS_Store
 coverage
