@@ -7,4 +7,3 @@ export enum Services {
   Towels = 'Towels',
   Fridge = 'Fridge'
 }
-
