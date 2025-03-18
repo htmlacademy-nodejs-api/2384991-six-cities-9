@@ -67,14 +67,8 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ default: 0 })
   public commentsNumber: number;
 
-  @prop({
-    required: true,
-    type: () => ({
-      longitude: { type: Number, min: -180, max: 180, required: true },
-      latitude: { type: Number, min: -90, max: 90, required: true }
-    })
-  })
-  public location: { longitude: number; latitude: number };
+  @prop({ required: true, type: Object })
+  public location: { longitude: number; latitude: number };  
 
 /* prepared for using in the next commits
 

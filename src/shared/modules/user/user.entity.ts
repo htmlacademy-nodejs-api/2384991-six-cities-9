@@ -26,10 +26,10 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
 
   @prop({
     required: true,
-    enum: ['standart', 'pro'],
-    default: 'standart',
+    enum: ['standard', 'pro'],
+    default: 'standard',
   })
-  public userType: 'standart' | 'pro';
+  public userType: 'standard' | 'pro';
 
   constructor(userData: User) {
     super();

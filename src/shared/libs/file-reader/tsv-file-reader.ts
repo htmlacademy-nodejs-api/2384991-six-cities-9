@@ -42,7 +42,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       email,
       avatarPath: avatarPath,
       password,
-      userType: userType as 'standart' | 'pro'
+      userType: userType as 'standard' | 'pro'
     };
 
     return {
@@ -105,7 +105,9 @@ export class TSVFileReader extends EventEmitter implements FileReader {
         importedRowCount++;
 
         const parsedOffer = this.parseLineToOffer(completeRow);
-        this.emit('line', parsedOffer);
+        await new Promise((resolve) => {
+          this.emit('line', parsedOffer, resolve);
+        });
       }
     }
 
