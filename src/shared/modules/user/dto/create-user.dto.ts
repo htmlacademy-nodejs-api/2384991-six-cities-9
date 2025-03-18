@@ -3,5 +3,5 @@ export class CreateUserDto {
   public name: string;
   public avatarPath: string;
   public password: string;
-  public userType: string;
+  public userType: 'standart' | 'pro';
 }

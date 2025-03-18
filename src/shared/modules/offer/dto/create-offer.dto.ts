@@ -12,7 +12,7 @@ export class CreateOfferDto {
   public guests: number;
   public price: number;
   public services: string[];
-  public author: string;
+  public authorId: string;
   public commentsNumber: number;
   public location: {
     latitude: number;

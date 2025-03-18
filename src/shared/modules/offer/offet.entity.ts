@@ -1,16 +1,17 @@
-import { defaultClasses, prop, getModelForClass, modelOptions } from '@typegoose/typegoose';
-import { User, RoomType, City, Services, Offer } from '../../types/index.js';
+import { defaultClasses, prop, getModelForClass, modelOptions, Ref } from '@typegoose/typegoose';
+import { RoomType, City, Services } from '../../types/index.js';
+import { UserEntity } from '../user/index.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface OfferEntity extends defaultClasses.Base {}
 
 @modelOptions({ schemaOptions: { timestamps: true, collection: 'offers' }})
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
-export class OfferEntity extends defaultClasses.TimeStamps implements Offer {
-  @prop({ required: true, minlength: 10, maxlength: 100 })
+export class OfferEntity extends defaultClasses.TimeStamps {
+  @prop({ required: true, minlength: 10, maxlength: 100, trim: true })
   public offerName: string;
 
-  @prop({ required: true, minlength: 20, maxlength: 1024 })
+  @prop({ required: true, minlength: 20, maxlength: 1024, trim: true })
   public description: string;
 
   @prop({ required: true })
@@ -57,8 +58,11 @@ export class OfferEntity extends defaultClasses.TimeStamps implements Offer {
   })
   public services: Services[];
 
-  @prop({ required: true })
-  public author: User;
+  @prop({
+    ref: UserEntity,
+    required: true
+  })
+  public authorId: Ref<UserEntity>;
 
   @prop({ default: 0 })
   public commentsNumber: number;
@@ -71,6 +75,8 @@ export class OfferEntity extends defaultClasses.TimeStamps implements Offer {
     })
   })
   public location: { longitude: number; latitude: number };
+
+/* prepared for using in the next commits
 
   constructor(offerData: Offer) {
     super();
@@ -91,7 +97,7 @@ export class OfferEntity extends defaultClasses.TimeStamps implements Offer {
     this.author = offerData.author;
     this.commentsNumber = offerData.commentsNumber;
     this.location = offerData.location;
-  }
+  } */
 }
 
 export const OfferModel = getModelForClass(OfferEntity);
