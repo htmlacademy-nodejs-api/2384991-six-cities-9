@@ -6,6 +6,11 @@ export const getRandomItems = <T>(items: T[]): T[] => {
   return items.slice(startPosition, endPosition);
 };
 
+export const getExactlyNItems = <T>(items: T[], count: number): T[] => {
+  const shuffled = [...items].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
+};
+
 export const getRandomItem = <T>(items: T[]): T => items[generateRandomValue(0, items.length - 1)];
 
 export const getErrorMessage = (error: unknown): string => error instanceof Error ? error.message : '';

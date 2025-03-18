@@ -1,7 +1,7 @@
 import EventEmitter from 'node:events';
 import { createReadStream } from 'node:fs';
 import { FileReader } from './file-reader.interface.js';
-import { Offer, City, RoomType, User, Services } from '../../types/index.js';
+import { Offer, City, RoomType, UserForMocks, Services } from '../../types/index.js';
 
 const DELIMITER = ',';
 
@@ -37,12 +37,12 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       latitude
     ] = line.split('\t');
 
-    const parsedAuthor: User = {
+    const parsedAuthor: UserForMocks = {
       name,
       email,
       avatarPath: avatarPath,
       password,
-      userType: userType as 'standart' | 'pro'
+      userType: userType as 'standard' | 'pro'
     };
 
     return {
@@ -105,7 +105,9 @@ export class TSVFileReader extends EventEmitter implements FileReader {
         importedRowCount++;
 
         const parsedOffer = this.parseLineToOffer(completeRow);
-        this.emit('line', parsedOffer);
+        await new Promise((resolve) => {
+          this.emit('line', parsedOffer, resolve);
+        });
       }
     }
 
