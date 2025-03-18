@@ -4,8 +4,6 @@ import { MockServerData } from '../../types/index.js';
 import { generateRandomValue, getRandomItem, getRandomItems, getExactlyNItems } from '../../helpers/common.js';
 import { OFFER_LIMITS } from './offer-limits.js';
 
-const IMAGES_COUNT = 6;	
-
 export class TSVOfferGenerator implements OfferGenerator {
   constructor(private readonly mockData: MockServerData) {}
 
@@ -14,7 +12,7 @@ export class TSVOfferGenerator implements OfferGenerator {
     const description = getRandomItem(this.mockData.descriptions);
     const city = getRandomItem(this.mockData.cities);
     const previewImage = getRandomItem(this.mockData.previewImages);
-    const images = getExactlyNItems(this.mockData.images, IMAGES_COUNT);
+    const images = getExactlyNItems(this.mockData.images, OFFER_LIMITS.IMAGES.COUNT);
     const isPremium = generateRandomValue(0, 1) === 1;
     const rating = generateRandomValue(OFFER_LIMITS.RATING.MIN, OFFER_LIMITS.RATING.MAX);
     const type = getRandomItem(this.mockData.roomTypes);

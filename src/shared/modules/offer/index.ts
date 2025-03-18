@@ -1,4 +1,4 @@
-export { OfferModel, OfferEntity } from './offet.entity.js';
+export { OfferModel, OfferEntity } from './offer.entity.js';
 export { CreateOfferDto } from './dto/create-offer.dto.js';
 export { OfferService } from './offer-service.interface.js';
 export { DefaultOfferService } from './default-offer.service.js';

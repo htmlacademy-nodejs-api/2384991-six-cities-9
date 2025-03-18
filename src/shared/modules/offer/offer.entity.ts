@@ -1,6 +1,7 @@
 import { defaultClasses, prop, getModelForClass, modelOptions, Ref } from '@typegoose/typegoose';
 import { RoomType, City, Services } from '../../types/index.js';
 import { UserEntity } from '../user/index.js';
+import { OFFER_LIMITS } from '../../libs/offer-generator/offer-limits.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface OfferEntity extends defaultClasses.Base {}
@@ -27,8 +28,8 @@ export class OfferEntity extends defaultClasses.TimeStamps {
     required: true,
     type: () => [String],
     validate: {
-      validator: (arr: string[]) => arr.length === 6,
-      message: 'Exactly 6 images are required'
+      validator: (arr: string[]) => arr.length === OFFER_LIMITS.IMAGES.COUNT,
+      message: `Exactly ${OFFER_LIMITS.IMAGES.COUNT} images are required`
     }
   })
   public images: string[];
@@ -68,7 +69,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public commentsNumber: number;
 
   @prop({ required: true, type: Object })
-  public location: { longitude: number; latitude: number };  
+  public location: { longitude: number; latitude: number };
 
 /* prepared for using in the next commits
 

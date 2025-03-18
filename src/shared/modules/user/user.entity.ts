@@ -8,7 +8,7 @@ export interface UserEntity extends defaultClasses.Base {}
 @modelOptions({ schemaOptions: { timestamps: true, collection: 'users' }})
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class UserEntity extends defaultClasses.TimeStamps implements User {
-  @prop({ required: true, minlength: 2, default: '' })
+  @prop({ required: true, minlength: 2 })
   public name: string;
 
   @prop({
@@ -21,7 +21,7 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   @prop({ required: true, minlength: 5 })
   public avatarPath: string;
 
-  @prop({ required: true, minlength: 6, default: '' })
+  @prop({ required: true, minlength: 6 })
   private password?: string;
 
   @prop({

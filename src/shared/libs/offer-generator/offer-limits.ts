@@ -4,5 +4,6 @@ export const OFFER_LIMITS = {
   GUESTS: { MIN: 1, MAX: 10 },
   RATING: { MIN: 1, MAX: 5 },
   COMMENTS: { MIN: 0, MAX: 50 },
-  WEEK_DAYS: { FIRST: 1, LAST: 7 }
+  WEEK_DAYS: { FIRST: 1, LAST: 7 },
+  IMAGES: { COUNT: 6 },
 } as const;

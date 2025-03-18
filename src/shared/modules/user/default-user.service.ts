@@ -36,8 +36,8 @@ export class DefaultUserService implements UserService {
       this.logger.info(`User found: ${dto.email}`);
       return existingUser;
     }
-  
+
     this.logger.info(`Creating new user: ${dto.email}`);
     return this.create(dto, salt);
-  }  
+  }
 }

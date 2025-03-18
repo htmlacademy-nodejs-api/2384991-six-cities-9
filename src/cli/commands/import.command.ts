@@ -12,11 +12,10 @@ export const DEFAULT_DB_PORT = '27017';
 export const DEFAULT_USER_PASSWORD = '123456';
 
 export class ImportCommand implements Command {
-  private userService: UserService;
-  private offerService: OfferService;
-  private databaseClient: DatabaseClient;
-  private logger: Logger;
-  private salt: string;
+  private readonly userService: UserService;
+  private readonly offerService: OfferService;
+  private readonly databaseClient: DatabaseClient;
+  private readonly logger: Logger;
 
   constructor() {
     this.onImportedOffer = this.onImportedOffer.bind(this);
@@ -32,9 +31,11 @@ export class ImportCommand implements Command {
     return '--import';
   }
 
-  private async onImportedOffer(offer: Offer, resolve: () => void) {
-    await this.saveOffer(offer);
-    resolve();
+  private onImportedOffer(salt: string) {
+    return async (offer: Offer, resolve: () => void) => {
+      await this.saveOffer(offer, salt);
+      resolve();
+    };
   }
 
   private onCompleteImport(count: number) {
@@ -42,33 +43,24 @@ export class ImportCommand implements Command {
     this.databaseClient.disconnect();
   }
 
-  private async saveOffer(offer: Offer): Promise<void> {
+  private async saveOffer(offer: Offer, salt: string): Promise<void> {
     try {
-      const user = await this.userService.findOrCreate({
-        ...offer.author,
-        password: DEFAULT_USER_PASSWORD,
-      }, this.salt);
-  
-      await this.offerService.create({
-        authorId: user._id.toString(),
-        ...offer,
-      });
-  
+      const userData = { ...offer.author, password: DEFAULT_USER_PASSWORD };
+      const user = await this.userService.findOrCreate(userData, salt);
+
+      const offerData = { ...offer, authorId: user._id.toString() };
+      await this.offerService.create(offerData);
+
       this.logger.info(`Offer "${offer.offerName}" successfully saved.`);
     } catch (err) {
       const error = err instanceof Error ? err : new Error(String(err));
-      
-      this.logger.error(
-        `Failed to save offer "${offer.offerName}".`,
-        error,
-      );
+      this.logger.error(`Failed to save offer "${offer.offerName}".`, error);
     }
   }
-  
+
   public async execute(filename: string, login: string, password: string, host: string, dbname: string, salt: string): Promise<void> {
     const uri = getMongoURI(login, password, host, DEFAULT_DB_PORT, dbname);
-    this.salt = salt;
-    
+
     await this.databaseClient.connect(uri);
 
     if (!filename) {
@@ -78,7 +70,7 @@ export class ImportCommand implements Command {
 
     const fileReader = new TSVFileReader(filename.trim());
 
-    fileReader.on('line', this.onImportedOffer);
+    fileReader.on('line', this.onImportedOffer(salt));
     fileReader.on('end', this.onCompleteImport);
 
     try {
