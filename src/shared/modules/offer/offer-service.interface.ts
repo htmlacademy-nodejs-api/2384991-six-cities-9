@@ -10,4 +10,5 @@ export interface OfferService {
   findPremiumByCity(city: string): Promise<DocumentType<OfferEntity>[]>;
   incCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null>;
   exists(documentId: string): Promise<boolean>;
+  updateRatingAndCommentCount(offerId: string, rating: number, commentCount: number): Promise<void>;
 }

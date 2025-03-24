@@ -26,7 +26,7 @@ export class DefaultOfferService implements OfferService {
   public async findById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
       .findById(offerId)
-      .populate(['userId'])
+      .populate('userId', '_id')
       .exec();
   }
 
@@ -37,14 +37,14 @@ export class DefaultOfferService implements OfferService {
       .find()
       .limit(limit)
       .sort({ createdAt: SortType.Desc })
-      .populate(['userId'])
+      .populate('userId', '_id')
       .exec();
   }
 
   public async updateById(offerId: string, dto: CreateOfferDto): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
       .findByIdAndUpdate(offerId, dto, { new: true })
-      .populate(['userId'])
+      .populate('userId', '_id')
       .exec();
   }
 
@@ -57,7 +57,7 @@ export class DefaultOfferService implements OfferService {
   public async findPremiumByCity(city: string): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
       .find({ city, isPremium: true })
-      .populate(['userId'])
+      .populate('userId', '_id')
       .sort({ createdAt: SortType.Desc })
       .limit(PREMIUM_OFFERS_LIMIT)
       .exec();
@@ -71,7 +71,22 @@ export class DefaultOfferService implements OfferService {
   }
 
   public async exists(documentId: string): Promise<boolean> {
-    return (await this.offerModel
-      .exists({_id: documentId})) !== null;
+    return this.offerModel.exists({ _id: documentId }).then((result) => result !== null);
+  }
+
+  public async updateRatingAndCommentCount(
+    offerId: string,
+    rating: number,
+    commentCount: number
+  ): Promise<void> {
+    await this.offerModel.updateOne(
+      { _id: offerId },
+      {
+        $set: {
+          rating,
+          commentCount
+        }
+      }
+    ).exec();
   }
 }
