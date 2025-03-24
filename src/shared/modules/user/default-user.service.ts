@@ -5,6 +5,7 @@ import { UserEntity } from './user.entity.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { Component } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
+import { OfferEntity } from '../offer/index.js';
 
 @injectable()
 export class DefaultUserService implements UserService {
@@ -23,11 +24,11 @@ export class DefaultUserService implements UserService {
   }
 
   public async findByEmail(email: string): Promise<DocumentType<UserEntity> | null> {
-    return this.userModel.findOne({email});
+    return this.userModel.findOne({email}).exec();
   }
 
   public async findById(id: string): Promise<DocumentType<UserEntity> | null> {
-    return this.userModel.findById(id);
+    return this.userModel.findById(id).exec();
   }
 
   public async findOrCreate(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>> {
@@ -39,5 +40,33 @@ export class DefaultUserService implements UserService {
 
     this.logger.info(`Creating new user: ${dto.email}`);
     return this.create(dto, salt);
+  }
+
+  public async updateById(id: string, dto: CreateUserDto): Promise<DocumentType<UserEntity> | null> {
+    return this.userModel
+      .findByIdAndUpdate(id, dto, {new: true})
+      .exec();
+  }
+
+  public async addFavorite(userId: string, offerId: string): Promise<void> {
+    await this.userModel
+      .findByIdAndUpdate(userId, {$addToSet: {favorites: offerId}})
+      .exec();
+  }
+
+  public async removeFavorite(userId: string, offerId: string): Promise<void> {
+    await this.userModel
+      .findByIdAndUpdate(userId, {$pull: {favorites: offerId}})
+      .exec();
+  }
+
+  public async findFavorites(userId: string): Promise<DocumentType<OfferEntity>[]> {
+    const user = await this.userModel.findById(userId).populate('favorites').exec();
+
+    if (!user || !user.favorites) {
+      return [];
+    }
+
+    return user.favorites as DocumentType<OfferEntity>[];
   }
 }
