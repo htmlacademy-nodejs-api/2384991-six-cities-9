@@ -1,0 +1,452 @@
+openapi: 3.1.0
+info:
+  title: API server for "Six cities"
+  description: |-
+    * List of resources and routes of the server "Six cities"
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 2.0.0
+tags:
+  - name: users
+    description: Actions with users
+  - name: offers
+    description: Actions with offers
+  - name: comments
+    description: Actions with comments
+paths: 
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: User registration
+      description: Register a new user
+      requestBody:
+        description: User registration data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUser'
+
+      responses:
+        "201":
+          description: User registered. User object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+        "409":
+          description: A user with this email already exists.
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: User login
+      description: Login user based on login and password
+      requestBody:
+        description: Login credentials
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/loginUser'
+      responses:
+        "200":
+          description: Login successful. Returns user object and token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/loginResponse'
+        "401":
+          description: Invalid login or password
+
+    get:
+      tags:
+        - users
+      summary: User status check
+      description: Check user status
+      responses:
+        "200":
+          description: User is authenticated
+        "401":
+          description: User is not authenticated
+
+  /users/me/avatar:
+    post:
+      tags:
+        - users
+      summary: Upload user avatar image
+      description: Uploads a user's avatar image. The avatar image must be in `png` or `jpg` format.
+      requestBody:
+        description: Avatar image to upload
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Avatar uploaded successfully
+        "400":
+          description: Invalid file format or bad request
+        "401":
+          description: Unauthorized. Token missing or invalid
+
+
+  /users/me/favorites:
+    get:
+      tags:
+        - users
+      summary: Favorite offers of current user
+      description: Get all offers added to favorites by the authenticated user.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: List of favorite offers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offer'
+        "401":
+          description: Unauthorized. Token required.
+
+
+  /offers:
+    get:
+      tags:
+        - offers
+      summary: List of offers
+      description: Get a list of all rental offers
+      responses:
+        "200":
+          description: List of offers returned successfully
+
+  /offers/create:
+    post:
+      tags:
+        - offers
+      summary: New offer creating
+      description: Create new offer
+      requestBody:
+        description: Data for new offer creation
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createOffer'
+      responses:
+        "201":
+          description: Offer created successfully
+        "400":
+          description: Invalid offer data
+
+  /offers/{offerId}:
+    get:
+      tags:
+        - offers
+      summary: Offer details
+      description: Get detailed information for a specific offer by ID
+      responses:
+        "200":
+          description: Offer details returned successfully
+        "404":
+          description: Offer not found
+
+  /offers/{offerId}/edit:
+    patch:
+      tags:
+        - offers
+      summary: Edit existing offer
+      description: Update the details of an existing offer
+      requestBody:
+        description: Updated offer data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateOffer'
+      responses:
+        "200":
+          description: Offer updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+        "404":
+          description: Offer not found
+
+  /offers/{offerId}/delete:
+    delete:
+      tags:
+        - offers
+      summary: Delete offer
+      description: Remove an offer by ID
+      responses:
+        "204":
+          description: Offer deleted successfully
+        "404":
+          description: Offer not found
+
+  /offers/premium/{city}:
+    get:
+      tags:
+        - offers
+      summary: Premium offers for a city
+      description: Get up to 3 premium offers for a specific city, sorted by publication date (descending)
+      responses:
+        "200":
+          description: List of premium offers returned successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offer'
+
+  /offers/{offerId}/favorite:
+    post:
+      tags:
+        - offers
+      summary: Add offer to favorites
+      description: Add specified offer to favorites (authorized users only)
+      responses:
+        "200":
+          description: Offer added to favorites
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+        "401":
+          description: Unauthorized. Token required.
+        "404":
+          description: Offer not found
+
+    delete:
+      tags:
+        - offers
+      summary: Remove offer from favorites
+      description: Remove specified offer from favorites (authorized users only)
+      responses:
+        "200":
+          description: Offer removed from favorites
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+        "401":
+          description: Unauthorized. Token required.
+        "404":
+          description: Offer not found
+
+  /comments/{offerId}:
+    get:
+      tags:
+        - comments
+      summary: Get comments for offer
+      description: Get up to 50 latest comments for the offer, sorted by date descending
+      responses:
+        "200":
+          description: List of comments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/comment'
+        "404":
+          description: Offer not found
+
+    post:
+      tags:
+        - comments
+      summary: Add comment to offer
+      description: Add comment to a specific offer (authorized users only)
+      requestBody:
+        description: Comment data to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createComment'
+      responses:
+        "201":
+          description: Comment created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/comment'
+        "400":
+          description: Validation error
+        "401":
+          description: Unauthorized. Token required.
+        "404":
+          description: Offer not found
+
+components:
+  schemas:
+    createUser:
+      type: object
+      properties:
+        name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          example: 1F9Zo@example.com
+        password:
+          type: string
+          example: password
+        avatarPath:
+          type: string
+          example: https://example.com/avatar.jpg
+    user:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+        email:
+          type: string
+          example: keks@htmlacademy.ru
+
+    loginUser:
+      type: object
+      properties:
+        email:
+          type: string
+          example: user@example.com
+        password:
+          type: string
+          example: password123
+
+    loginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        user:
+          $ref: '#/components/schemas/user'
+    
+    offer:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+        title:
+          type: string
+          example: Cozy apartment in the city center
+        description:
+          type: string
+          example: Beautiful and cozy apartment with modern furniture
+        city:
+          type: string
+          example: Paris
+        price:
+          type: number
+          example: 150
+        premium:
+          type: boolean
+          example: true
+        type:
+          type: string
+          enum: [apartment, room, house, hotel]
+          example: apartment
+        bedrooms:
+          type: integer
+          example: 2
+        maxAdults:
+          type: integer
+          example: 4
+        goods:
+          type: array
+          items:
+            type: string
+          example: ["Wi-Fi", "Kitchen", "Heating"]
+        location:
+          type: object
+          properties:
+            latitude:
+              type: number
+              example: 48.8566
+            longitude:
+              type: number
+              example: 2.3522
+
+    createOffer:
+      allOf:
+        - $ref: '#/components/schemas/offer'
+        - type: object
+          properties: {}
+          required:
+            - title
+            - description
+            - city
+            - price
+            - type
+
+    updateOffer:
+      allOf:
+        - $ref: '#/components/schemas/offer'
+        - type: object
+          properties: {}
+          required:
+            - title
+            - description
+            - city
+            - price
+            - type
+
+    createComment:
+      type: object
+      properties:
+        text:
+          type: string
+          example: Great place to stay!
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 5
+
+    comment:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 64f7a9e9c2b5b6a7b8d9c1f2
+        text:
+          type: string
+          example: Great place to stay!
+        rating:
+          type: integer
+          example: 5
+        author:
+          type: object
+          properties:
+            id:
+              type: string
+              example: 6329c3d6a04ab1061c6425ea
+            name:
+              type: string
+              example: John Doe
+            avatarPath:
+              type: string
+              example: https://example.com/avatar.jpg
+        createdAt:
+          type: string
+          format: date-time
+          example: 2025-03-21T12:00:00Z
