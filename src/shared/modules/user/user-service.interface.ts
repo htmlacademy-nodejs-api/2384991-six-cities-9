@@ -7,3 +7,8 @@ export interface UserService {
   findById(id: string): Promise<DocumentType<UserEntity> | null>;
   findOrCreate(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>>;
 }
+/* findFavorites(userId: string): Promise<DocumentType<OfferEntity>[]>; 
+
+  addFavorite(userId: string, offerId: string): Promise<void>;
+  removeFavorite(userId: string, offerId: string): Promise<void>;
+*/
