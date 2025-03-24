@@ -25,41 +25,41 @@ export class DefaultOfferService implements OfferService {
 
   public async findById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
-    .findById(offerId)
-    .populate(['userId'])
-    .exec();
+      .findById(offerId)
+      .populate(['userId'])
+      .exec();
   }
 
   public async findOfferList(count?: number): Promise<DocumentType<OfferEntity>[]> {
     const limit = count ?? DEFAULT_OFFER_COUNT;
-  
+
     return this.offerModel
       .find()
       .limit(limit)
-      .sort({ createdAt: SortType.Desc }) 
+      .sort({ createdAt: SortType.Desc })
       .populate(['userId'])
       .exec();
   }
-  
+
   public async updateById(offerId: string, dto: CreateOfferDto): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
-    .findByIdAndUpdate(offerId, dto, { new: true })
-    .populate(['userId'])
-    .exec();
+      .findByIdAndUpdate(offerId, dto, { new: true })
+      .populate(['userId'])
+      .exec();
   }
 
   public async deleteById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
-    .findByIdAndDelete(offerId)
-    .exec();
+      .findByIdAndDelete(offerId)
+      .exec();
   }
 
   public async findPremiumByCity(city: string): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
       .find({ city, isPremium: true })
       .populate(['userId'])
-      .sort({ createdAt: SortType.Desc })  
-      .limit(PREMIUM_OFFERS_LIMIT) 
+      .sort({ createdAt: SortType.Desc })
+      .limit(PREMIUM_OFFERS_LIMIT)
       .exec();
   }
 
@@ -74,4 +74,4 @@ export class DefaultOfferService implements OfferService {
     return (await this.offerModel
       .exists({_id: documentId})) !== null;
   }
-} 
+}

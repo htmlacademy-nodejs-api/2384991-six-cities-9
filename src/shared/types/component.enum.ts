@@ -7,4 +7,6 @@ export const Component = {
   UserModel: Symbol('UserModel'),
   OfferService: Symbol('OfferService'),
   OfferModel: Symbol('OfferModel'),
+  CommentService: Symbol('CommentService'),
+  CommentModel: Symbol('CommentModel'),
 } as const;
