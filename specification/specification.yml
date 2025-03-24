@@ -74,19 +74,7 @@ paths:
         "401":
           description: User is not authenticated
 
-  /users/logout:
-    delete:
-      tags:
-        - users
-      summary: User logout
-      description: Terminate user session (authorized users only). Token must be valid.
-      responses:
-        "204":
-          description: Logout successful. No content.
-        "401":
-          description: Unauthorized. Invalid or missing token.
-
-  /users/{userId}/avatar:
+  /users/me/avatar:
     post:
       tags:
         - users
@@ -110,8 +98,28 @@ paths:
           description: Invalid file format or bad request
         "401":
           description: Unauthorized. Token missing or invalid
-        "404":
-          description: User not found
+
+
+  /users/me/favorites:
+    get:
+      tags:
+        - users
+      summary: Favorite offers of current user
+      description: Get all offers added to favorites by the authenticated user.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: List of favorite offers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offer'
+        "401":
+          description: Unauthorized. Token required.
+
 
   /offers:
     get:
@@ -204,25 +212,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/offer'
-
-  /offers/favorites:
-    get:
-      tags:
-        - offers
-      summary: Favorite offers
-      description: Get all offers added to favorites (authorized users only)
-      responses:
-        "200":
-          description: List of favorite offers
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/offer'
-        "401":
-          description: Unauthorized. Token required.
-
 
   /offers/{offerId}/favorite:
     post:
