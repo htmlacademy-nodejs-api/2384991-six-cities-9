@@ -37,7 +37,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ required: true, default: false })
   public isPremium: boolean;
 
-  @prop({ required: true, min: 1, max: 5 })
+  @prop({ required: true, min: 1, max: 5, default: 0 })
   public rating: number;
 
   @prop({ required: true, enum: RoomType })
@@ -66,7 +66,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public authorId: Ref<UserEntity>;
 
   @prop({ default: 0 })
-  public commentsNumber: number;
+  public commentCount: number;
 
   @prop({ required: true, type: Object })
   public location: { longitude: number; latitude: number };
@@ -90,7 +90,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
     this.price = offerData.price;
     this.services = offerData.services;
     this.author = offerData.author;
-    this.commentsNumber = offerData.commentsNumber;
+    this.commentCount = offerData.commentCount;
     this.location = offerData.location;
   } */
 }
