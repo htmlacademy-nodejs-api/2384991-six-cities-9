@@ -89,4 +89,12 @@ export class DefaultOfferService implements OfferService {
       }
     ).exec();
   }
+
+  public async findDuplicate(dto: CreateOfferDto): Promise<DocumentType<OfferEntity> | null> {
+    return this.offerModel.findOne({
+      offerName: dto.offerName,
+      city: dto.city,
+      authorId: dto.authorId
+    }).exec();
+  }  
 }

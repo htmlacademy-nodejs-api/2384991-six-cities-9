@@ -1,11 +1,13 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 import { BaseController, HttpMethod } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { OfferService } from './offer-service.interface.js';
-import { fillDTO } from '../../helpers/common.js';
+import { fillDTO } from '../../helpers/index.js';
 import { OfferRdo } from './rdo/offer.rdo.js';
+import { CreateOfferDto } from './dto/create-offer.dto.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -27,7 +29,17 @@ export class OfferController extends BaseController {
     this.ok(res, responseData);
   }
 
-  public create(_req: Request, _res: Response): void {
+  public async create({ body }: Request<Record<string, unknown>, Record<string, unknown>, CreateOfferDto>, res: Response): Promise<void> {
+    const existOffer = await this.offerService.findDuplicate(body);
 
+    if (existOffer) {
+      const existOfferError = new Error('Offer with this name already exists in this city.');
+      this.send(res, StatusCodes.UNPROCESSABLE_ENTITY, { error: existOfferError.message });
+
+      return this.logger.error(existOfferError.message, existOfferError);
+    }
+
+    const result = await this.offerService.create(body);
+    this.created(res, fillDTO(OfferRdo, result));
   }
 }
