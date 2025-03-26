@@ -10,7 +10,7 @@ export abstract class BaseController implements Controller {
   private readonly DEFAULT_CONTENT_TYPE = 'application/json';
   private readonly _router: Router;
 
-  constructor(private readonly logger: Logger) {
+  constructor(protected readonly logger: Logger) {
     this._router = Router();
   }
 

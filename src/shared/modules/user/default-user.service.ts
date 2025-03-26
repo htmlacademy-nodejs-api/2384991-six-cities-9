@@ -48,20 +48,20 @@ export class DefaultUserService implements UserService {
       .exec();
   }
 
-  public async addFavorite(userId: string, offerId: string): Promise<void> {
+  public async addFavorite(authorId: string, offerId: string): Promise<void> {
     await this.userModel
-      .findByIdAndUpdate(userId, {$addToSet: {favorites: offerId}})
+      .findByIdAndUpdate(authorId, {$addToSet: {favorites: offerId}})
       .exec();
   }
 
-  public async removeFavorite(userId: string, offerId: string): Promise<void> {
+  public async removeFavorite(authorId: string, offerId: string): Promise<void> {
     await this.userModel
-      .findByIdAndUpdate(userId, {$pull: {favorites: offerId}})
+      .findByIdAndUpdate(authorId, {$pull: {favorites: offerId}})
       .exec();
   }
 
-  public async findFavorites(userId: string): Promise<DocumentType<OfferEntity>[]> {
-    const user = await this.userModel.findById(userId).populate('favorites').exec();
+  public async findFavorites(authorId: string): Promise<DocumentType<OfferEntity>[]> {
+    const user = await this.userModel.findById(authorId).populate('favorites').exec();
 
     if (!user || !user.favorites) {
       return [];

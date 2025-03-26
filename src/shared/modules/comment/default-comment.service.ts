@@ -36,7 +36,7 @@ export class DefaultCommentService implements CommentService {
       newCommentCount
     );
 
-    return comment.populate('userId');
+    return comment.populate('authorId');
   }
 
   public async findByOfferId(offerId: string): Promise<DocumentType<CommentEntity>[]> {
@@ -45,7 +45,7 @@ export class DefaultCommentService implements CommentService {
       .find({ offerId })
       .sort({ createdAt: SortType.Desc })
       .limit(COMMENT_LIMIT)
-      .populate('userId')
+      .populate('authorId')
       .exec();
   }
 
@@ -54,7 +54,7 @@ export class DefaultCommentService implements CommentService {
       .find({ offerId })
       .sort({ createdAt: SortType.Desc })
       .limit(COMMENT_LIMIT)
-      .populate('userId')
+      .populate('authorId')
       .exec();
 
     const offer = await this.offerService.findById(offerId);
