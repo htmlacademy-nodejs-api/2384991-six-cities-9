@@ -7,7 +7,7 @@ import { Component } from '../../types/index.js';
 import { OfferService } from './offer-service.interface.js';
 import { fillDTO } from '../../helpers/index.js';
 import { OfferRdo } from './rdo/offer.rdo.js';
-import { CreateOfferDto } from './dto/create-offer.dto.js';
+import { CreateOfferRequest } from './create-offer-request.type.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -29,7 +29,7 @@ export class OfferController extends BaseController {
     this.ok(res, responseData);
   }
 
-  public async create({ body }: Request<Record<string, unknown>, Record<string, unknown>, CreateOfferDto>, res: Response): Promise<void> {
+  public async create({ body }: CreateOfferRequest, res: Response): Promise<void> {
     const existOffer = await this.offerService.findDuplicate(body);
 
     if (existOffer) {

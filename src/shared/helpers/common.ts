@@ -18,3 +18,6 @@ export const getRandomItem = <T>(items: T[]): T => items[generateRandomValue(0, 
 export const getErrorMessage = (error: unknown): string => error instanceof Error ? error.message : '';
 
 export const fillDTO = <T, V>(someDto: ClassConstructor<T>, plainObject: V) => plainToInstance(someDto, plainObject, { excludeExtraneousValues: true });
+
+export const createErrorObject = (message: string) => ({ error: message });
+

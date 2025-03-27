@@ -1,9 +1,10 @@
 import { inject, injectable } from 'inversify';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { BaseController, HttpMethod } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { UserService } from './user-service.interface.js';
+import { CreateUserRequest } from './create-user-request.type.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -16,7 +17,7 @@ export class UserController extends BaseController {
     this.logger.info('Register routes for UserController...');
 
     this.addRoute({ path: '/', method: HttpMethod.Get, handler: this.index });
-    this.addRoute({ path: '/', method: HttpMethod.Post, handler: this.create });
+    this.addRoute({ path: '/create', method: HttpMethod.Post, handler: this.create });
   }
 
   public async index(req: Request, res: Response): Promise<void> {
@@ -25,7 +26,7 @@ export class UserController extends BaseController {
     this.ok(res, users);
   }
 
-  public create(_req: Request, _res: Response): void {
-
+  public async create(_req: CreateUserRequest, _res: Response, _next: NextFunction): Promise<void> {
+    throw new Error('[UserController] Oops');
   }
 }
