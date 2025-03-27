@@ -1,4 +1,3 @@
-// offer.rdo.ts
 import { Expose, Type } from 'class-transformer';
 
 class LocationRdo {

@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { BaseController, HttpMethod } from '../../libs/rest/index.js';
+import { BaseController, HttpError, HttpMethod } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { OfferService } from './offer-service.interface.js';
@@ -33,10 +33,11 @@ export class OfferController extends BaseController {
     const existOffer = await this.offerService.findDuplicate(body);
 
     if (existOffer) {
-      const existOfferError = new Error('Offer with this name already exists in this city.');
-      this.send(res, StatusCodes.UNPROCESSABLE_ENTITY, { error: existOfferError.message });
-
-      return this.logger.error(existOfferError.message, existOfferError);
+      throw new HttpError(
+        StatusCodes.CONFLICT,
+        `Offer with name ${body.offerName} already exists in this city.`,
+        'OfferController'
+      );
     }
 
     const result = await this.offerService.create(body);
