@@ -26,7 +26,7 @@ export class DefaultOfferService implements OfferService {
   public async findById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
       .findById(offerId)
-      .populate('userId', '_id')
+      .populate('authorId', '_id')
       .exec();
   }
 
@@ -37,14 +37,14 @@ export class DefaultOfferService implements OfferService {
       .find()
       .limit(limit)
       .sort({ createdAt: SortType.Desc })
-      .populate('userId', '_id')
+      .populate('authorId', '_id')
       .exec();
   }
 
   public async updateById(offerId: string, dto: CreateOfferDto): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
       .findByIdAndUpdate(offerId, dto, { new: true })
-      .populate('userId', '_id')
+      .populate('authorId', '_id')
       .exec();
   }
 
@@ -57,7 +57,7 @@ export class DefaultOfferService implements OfferService {
   public async findPremiumByCity(city: string): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
       .find({ city, isPremium: true })
-      .populate('userId', '_id')
+      .populate('authorId', '_id')
       .sort({ createdAt: SortType.Desc })
       .limit(PREMIUM_OFFERS_LIMIT)
       .exec();
@@ -88,5 +88,13 @@ export class DefaultOfferService implements OfferService {
         }
       }
     ).exec();
+  }
+
+  public async findDuplicate(dto: CreateOfferDto): Promise<DocumentType<OfferEntity> | null> {
+    return this.offerModel.findOne({
+      offerName: dto.offerName,
+      city: dto.city,
+      authorId: dto.authorId
+    }).exec();
   }
 }

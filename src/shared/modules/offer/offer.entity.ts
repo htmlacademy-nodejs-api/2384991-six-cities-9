@@ -60,7 +60,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public services: Services[];
 
   @prop({
-    ref: UserEntity,
+    ref: () => 'UserEntity',
     required: true
   })
   public authorId: Ref<UserEntity>;
