@@ -96,5 +96,5 @@ export class DefaultOfferService implements OfferService {
       city: dto.city,
       authorId: dto.authorId
     }).exec();
-  }  
+  }
 }

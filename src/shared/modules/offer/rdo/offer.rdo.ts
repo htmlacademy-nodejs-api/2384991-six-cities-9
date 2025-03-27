@@ -3,65 +3,65 @@ import { Expose, Type } from 'class-transformer';
 
 class LocationRdo {
   @Expose()
-  latitude: number;
+    latitude: number;
 
   @Expose()
-  longitude: number;
+    longitude: number;
 }
 
 class AuthorRdo {
   @Expose({ name: '_id' })
-  id: string;
+    id: string;
 }
 
 export class OfferRdo {
   @Expose()
-  offerName: string;
+    offerName: string;
 
   @Expose()
-  description: string;
+    description: string;
 
   @Expose()
-  publicationDate: string;
+    publicationDate: string;
 
   @Expose()
-  city: string;
+    city: string;
 
   @Expose()
-  previewImage: string;
+    previewImage: string;
 
   @Expose()
-  images: string[];
+    images: string[];
 
   @Expose()
-  isPremium: boolean;
+    isPremium: boolean;
 
   @Expose()
-  rating: number;
+    rating: number;
 
   @Expose()
-  type: string;
+    type: string;
 
   @Expose()
-  roomsNumber: number;
+    roomsNumber: number;
 
   @Expose()
-  guests: number;
+    guests: number;
 
   @Expose()
-  price: number;
+    price: number;
 
   @Expose()
-  services: string[];
+    services: string[];
 
   @Expose()
   @Type(() => AuthorRdo)
-  authorId: AuthorRdo;
+    authorId: AuthorRdo;
 
   @Expose()
-  commentCount: number;
+    commentCount: number;
 
   @Expose()
   @Type(() => LocationRdo)
-  location: LocationRdo;
+    location: LocationRdo;
 }
