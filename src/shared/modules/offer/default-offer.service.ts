@@ -19,14 +19,23 @@ export class DefaultOfferService implements OfferService {
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
     const result = await this.offerModel.create(dto);
     this.logger.info(`New offer created: ${dto.offerName}`);
+    const populated = await this.offerModel
+      .findById(result._id)
+      .populate('authorId')
+      .exec();
 
-    return result;
+    if (!populated) {
+      throw new Error('Created offer not found after population.');
+    }
+
+    return populated;
   }
+
 
   public async findById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
       .findById(offerId)
-      .populate('authorId', '_id')
+      .populate('authorId')
       .exec();
   }
 
@@ -37,14 +46,14 @@ export class DefaultOfferService implements OfferService {
       .find()
       .limit(limit)
       .sort({ createdAt: SortType.Desc })
-      .populate('authorId', '_id')
+      .populate('authorId')
       .exec();
   }
 
   public async updateById(offerId: string, dto: CreateOfferDto): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
       .findByIdAndUpdate(offerId, dto, { new: true })
-      .populate('authorId', '_id')
+      .populate('authorId')
       .exec();
   }
 
@@ -57,7 +66,7 @@ export class DefaultOfferService implements OfferService {
   public async findPremiumByCity(city: string): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
       .find({ city, isPremium: true })
-      .populate('authorId', '_id')
+      .populate('authorId')
       .sort({ createdAt: SortType.Desc })
       .limit(PREMIUM_OFFERS_LIMIT)
       .exec();

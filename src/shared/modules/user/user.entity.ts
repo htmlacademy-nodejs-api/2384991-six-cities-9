@@ -32,8 +32,8 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   })
   public userType: 'standard' | 'pro';
 
-  @prop({ ref: () => OfferEntity, default: [] })
-  public favorites!: Ref<OfferEntity>[];
+  @prop({ ref: 'OfferEntity', default: [] })
+  public favorites!: Ref<OfferEntity>[];  
 
   constructor(userData: User) {
     super();

@@ -5,3 +5,17 @@ GET http://localhost:4000/comments HTTP/1.1
 Content-Type: application/json
 
 ###
+
+## Create comment
+
+POST http://localhost:4000/comments HTTP/1.1
+Content-Type: application/json
+
+{
+  "text": "A stylish and spacious loft",
+  "offerId": "67e802e3e2586347e6edc75b",
+  "authorId": "67e801b1e2586347e6edc753",
+  "rating": 5
+}
+
+###

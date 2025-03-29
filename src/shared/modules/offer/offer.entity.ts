@@ -1,6 +1,6 @@
+import { UserEntity } from '../user/index.js';
 import { defaultClasses, prop, getModelForClass, modelOptions, Ref } from '@typegoose/typegoose';
 import { RoomType, City, Services } from '../../types/index.js';
-import { UserEntity } from '../user/index.js';
 import { OFFER_LIMITS } from '../../libs/offer-generator/offer-limits.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
@@ -60,10 +60,10 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public services: Services[];
 
   @prop({
-    ref: () => 'UserEntity',
+    ref: () => UserEntity,
     required: true
   })
-  public authorId: Ref<UserEntity>;
+  public authorId!: Ref<UserEntity>;
 
   @prop({ default: 0 })
   public commentCount: number;
