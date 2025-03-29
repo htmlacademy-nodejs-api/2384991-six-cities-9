@@ -9,12 +9,15 @@ import { ParamOfferId, ParamCity } from './type/index.js';
 import { fillDTO } from '../../helpers/index.js';
 import { OfferRdo } from './rdo/offer.rdo.js';
 import { CreateOfferRequest } from './create-offer-request.type.js';
+import { CommentRdo } from '../comment/rdo/comment.rdo.js';
+import { CommentService } from '../comment/index.js';
 
 @injectable()
 export class OfferController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
-    @inject(Component.OfferService) private readonly offerService: OfferService
+    @inject(Component.OfferService) private readonly offerService: OfferService,
+    @inject(Component.CommentService) private readonly commentService: CommentService
   ) {
     super(logger);
 
@@ -25,6 +28,7 @@ export class OfferController extends BaseController {
     this.addRoute({ path: '/:offerId', method: HttpMethod.Get, handler: this.show });
     this.addRoute({ path: '/:offerId', method: HttpMethod.Delete, handler: this.delete });
     this.addRoute({ path: '/:offerId', method: HttpMethod.Patch, handler: this.update });
+    this.addRoute({ path: '/:offerId/comments', method: HttpMethod.Get, handler: this.getCommentsForOffer });
     this.addRoute({ path: '/premium/:city', method: HttpMethod.Get, handler: this.findPremiumByCity });
   }
 
@@ -106,5 +110,21 @@ export class OfferController extends BaseController {
 
     const offers = await this.offerService.findPremiumByCity(city);
     this.ok(res, fillDTO(OfferRdo, offers));
+  }
+
+  public async getCommentsForOffer({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
+    const { offerId } = params;
+
+    const offerExists = await this.offerService.exists(offerId);
+    if (!offerExists) {
+      throw new HttpError(
+        StatusCodes.NOT_FOUND,
+        `Offer with id ${offerId} not found.`,
+        'OfferController'
+      );
+    }
+
+    const comments = await this.commentService.findByOfferId(offerId);
+    this.ok(res, fillDTO(CommentRdo, comments));
   }
 }

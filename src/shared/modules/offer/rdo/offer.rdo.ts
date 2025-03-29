@@ -11,52 +11,52 @@ class LocationRdo {
 
 export class OfferRdo {
   @Expose()
-    public offerName: string;
+  public offerName: string;
 
   @Expose()
-    public description: string;
+  public description: string;
 
   @Expose()
-    public publicationDate: string;
+  public publicationDate: string;
 
   @Expose()
-    public city: string;
+  public city: string;
 
   @Expose()
-    public previewImage: string;
+  public previewImage: string;
 
   @Expose()
-    public images: string[];
+  public images: string[];
 
   @Expose()
-    public isPremium: boolean;
+  public isPremium: boolean;
 
   @Expose()
-    public rating: number;
+  public rating: number;
 
   @Expose()
-    public type: string;
+  public type: string;
 
   @Expose()
-    public roomsNumber: number;
+  public roomsNumber: number;
 
   @Expose()
-    public guests: number;
+  public guests: number;
 
   @Expose()
-    public price: number;
+  public price: number;
 
   @Expose()
-    public services: string[];
+  public services: string[];
 
   @Expose({ name: 'authorId' })
   @Type(() => UserRdo)
-    public author: UserRdo;
+  public author: UserRdo;
 
   @Expose()
-    public commentCount: number;
+  public commentCount: number;
 
   @Expose()
   @Type(() => LocationRdo)
-    public location: LocationRdo;
+  public location: LocationRdo;
 }

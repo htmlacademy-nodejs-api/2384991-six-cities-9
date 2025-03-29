@@ -23,14 +23,14 @@ export class DefaultOfferService implements OfferService {
       .findById(result._id)
       .populate('authorId')
       .exec();
-  
+
     if (!populated) {
       throw new Error('Created offer not found after population.');
     }
-  
+
     return populated;
   }
-  
+
 
   public async findById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
