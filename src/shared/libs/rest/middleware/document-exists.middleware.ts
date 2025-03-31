@@ -10,7 +10,7 @@ export class DocumentExistsMiddleware implements Middleware {
     private readonly entityName: string,
     private readonly paramName: string,
   ) {}
-  
+
   public async execute({ params }: Request, _res: Response, next: NextFunction): Promise<void> {
     const documentId = params[this.paramName];
 
