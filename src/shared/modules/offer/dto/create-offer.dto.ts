@@ -20,7 +20,7 @@ import { Type } from 'class-transformer';
 import { CreateOfferValidationMessage } from './create-offer.messages.js';
 import { City, RoomType, Services } from '../../../types/index.js';
 
-export class LocationDto {
+export class LocationDTO {
   @IsNumber({}, { message: CreateOfferValidationMessage.location.latitude })
   @Min(-90, { message: CreateOfferValidationMessage.location.latitude })
   @Max(90, { message: CreateOfferValidationMessage.location.latitude })
@@ -32,7 +32,7 @@ export class LocationDto {
   public longitude: number;
 }
 
-export class CreateOfferDto {
+export class CreateOfferDTO {
   @MinLength(10, { message: CreateOfferValidationMessage.offerName.minLength })
   @MaxLength(100, { message: CreateOfferValidationMessage.offerName.maxLength })
   public offerName: string;
@@ -98,6 +98,6 @@ export class CreateOfferDto {
   public commentsNumber: number;
 
   @ValidateNested()
-  @Type(() => LocationDto)
-  public location: LocationDto;
+  @Type(() => LocationDTO)
+  public location: LocationDTO;
 }

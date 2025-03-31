@@ -2,7 +2,7 @@ import { DocumentType, types } from '@typegoose/typegoose';
 import { injectable, inject } from 'inversify';
 import { OfferService } from './offer-service.interface.js';
 import { OfferEntity } from './offer.entity.js';
-import { CreateOfferDto } from './dto/create-offer.dto.js';
+import { CreateOfferDTO } from './dto/create-offer.dto.js';
 import { Component, SortType } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 
@@ -16,7 +16,7 @@ export class DefaultOfferService implements OfferService {
     @inject(Component.OfferModel) private readonly offerModel: types.ModelType<OfferEntity>
   ) {}
 
-  public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
+  public async create(dto: CreateOfferDTO): Promise<DocumentType<OfferEntity>> {
     const result = await this.offerModel.create(dto);
     this.logger.info(`New offer created: ${dto.offerName}`);
     const populated = await this.offerModel
@@ -50,7 +50,7 @@ export class DefaultOfferService implements OfferService {
       .exec();
   }
 
-  public async updateById(offerId: string, dto: CreateOfferDto): Promise<DocumentType<OfferEntity> | null> {
+  public async updateById(offerId: string, dto: CreateOfferDTO): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
       .findByIdAndUpdate(offerId, dto, { new: true })
       .populate('authorId')
@@ -99,7 +99,7 @@ export class DefaultOfferService implements OfferService {
     ).exec();
   }
 
-  public async findDuplicate(dto: CreateOfferDto): Promise<DocumentType<OfferEntity> | null> {
+  public async findDuplicate(dto: CreateOfferDTO): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel.findOne({
       offerName: dto.offerName,
       city: dto.city,
