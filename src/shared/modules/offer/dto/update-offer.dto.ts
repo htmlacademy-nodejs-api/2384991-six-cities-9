@@ -26,13 +26,12 @@ export class LocationDto {
   @Min(-90, { message: CreateUpdateOfferMessage.location.latitude })
   @Max(90, { message: CreateUpdateOfferMessage.location.latitude })
   public latitude: number;
- 
 
   @IsOptional()
   @IsNumber({}, { message: CreateUpdateOfferMessage.location.longitude })
   @Min(-180, { message: CreateUpdateOfferMessage.location.longitude })
   @Max(180, { message: CreateUpdateOfferMessage.location.longitude })
-  public  longitude: number;
+  public longitude: number;
 }
 
 export class UpdateOfferDto {

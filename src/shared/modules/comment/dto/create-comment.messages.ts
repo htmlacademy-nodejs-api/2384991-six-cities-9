@@ -1,5 +1,3 @@
-import { isNumber, maxLength, minLength } from "class-validator";
-
 export const CreateCommentValidationMessage = {
   text: {
     invalidFormat: 'text is required',

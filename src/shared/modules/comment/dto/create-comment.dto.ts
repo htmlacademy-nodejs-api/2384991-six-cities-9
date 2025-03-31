@@ -6,7 +6,7 @@ export class CreateCommentDto {
   @MinLength(5, { message: CreateCommentValidationMessage.text.minLength })
   @MaxLength(1024, { message: CreateCommentValidationMessage.text.maxLength })
   public text: string;
-  
+
   @IsInt({ message: CreateCommentValidationMessage.rating.invalidFormat })
   public rating: number;
 

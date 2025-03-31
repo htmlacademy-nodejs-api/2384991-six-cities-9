@@ -29,7 +29,7 @@ export class LocationDto {
   @IsNumber({}, { message: CreateOfferValidationMessage.location.longitude })
   @Min(-180, { message: CreateOfferValidationMessage.location.longitude })
   @Max(180, { message: CreateOfferValidationMessage.location.longitude })
-  public  longitude: number;
+  public longitude: number;
 }
 
 export class CreateOfferDto {
