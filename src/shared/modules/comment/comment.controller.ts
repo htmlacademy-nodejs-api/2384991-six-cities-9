@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { Response } from 'express';
-import { BaseController, HttpError, HttpMethod } from '../../libs/rest/index.js';
+import { BaseController, HttpError, HttpMethod, ValidateDtoMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { CommentService } from './comment-service.interface.js';
@@ -9,6 +9,7 @@ import { CreateCommentRequest } from './comment-request-type.js';
 import { StatusCodes } from 'http-status-codes';
 import { fillDTO } from '../../helpers/common.js';
 import { CommentRdo } from './rdo/comment.rdo.js';
+import { CreateCommentDto } from './dto/create-comment.dto.js';
 
 @injectable()
 export class CommentController extends BaseController {
@@ -21,7 +22,12 @@ export class CommentController extends BaseController {
 
     this.logger.info('Register routes for CommentController...');
 
-    this.addRoute({ path: '/', method: HttpMethod.Post, handler: this.create });
+    this.addRoute({
+      path: '/',
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateCommentDto)]
+    });
   }
 
   public async create({ body }: CreateCommentRequest, res: Response): Promise<void> {

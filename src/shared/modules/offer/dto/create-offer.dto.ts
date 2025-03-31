@@ -7,6 +7,7 @@ import {
   IsMongoId,
   IsNumber,
   IsString,
+  IsUrl,
   Max,
   MaxLength,
   Min,
@@ -20,11 +21,15 @@ import { CreateOfferValidationMessage } from './create-offer.messages.js';
 import { City, RoomType, Services } from '../../../types/index.js';
 
 export class LocationDto {
-  @IsNumber()
-    latitude: number;
+  @IsNumber({}, { message: CreateOfferValidationMessage.location.latitude })
+  @Min(-90, { message: CreateOfferValidationMessage.location.latitude })
+  @Max(90, { message: CreateOfferValidationMessage.location.latitude })
+  public latitude: number;
 
-  @IsNumber()
-    longitude: number;
+  @IsNumber({}, { message: CreateOfferValidationMessage.location.longitude })
+  @Min(-180, { message: CreateOfferValidationMessage.location.longitude })
+  @Max(180, { message: CreateOfferValidationMessage.location.longitude })
+  public  longitude: number;
 }
 
 export class CreateOfferDto {
@@ -42,8 +47,9 @@ export class CreateOfferDto {
   @IsEnum(City, { message: CreateOfferValidationMessage.city.isEnum })
   public city: City;
 
-  @IsString()
-  @MinLength(5)
+  @IsString({ message: CreateOfferValidationMessage.previewImage.isNotEmpty })
+  @MinLength(5, { message: CreateOfferValidationMessage.previewImage.isNotEmpty })
+  @IsUrl({}, { message: CreateOfferValidationMessage.previewImage.isUrl })
   public previewImage: string;
 
   @IsArray({ message: CreateOfferValidationMessage.images.isArray })
@@ -51,25 +57,25 @@ export class CreateOfferDto {
   @ArrayMaxSize(6, { message: CreateOfferValidationMessage.images.maxSize })
   public images: string[];
 
-  @IsBoolean()
+  @IsBoolean({ message: CreateOfferValidationMessage.isPremium.isBoolean })
   public isPremium: boolean;
 
-  @IsNumber()
-  @Min(1)
-  @Max(5)
+  @IsNumber({}, { message: CreateOfferValidationMessage.rating.isNumber })
+  @Min(1, { message: CreateOfferValidationMessage.rating.minValue })
+  @Max(5, { message: CreateOfferValidationMessage.rating.maxValue })
   public rating: number;
 
   @IsEnum(RoomType, { message: CreateOfferValidationMessage.type.isEnum })
   public type: RoomType;
 
-  @IsInt()
-  @Min(1)
-  @Max(8)
+  @IsInt({ message: CreateOfferValidationMessage.roomsNumber.isInt })
+  @Min(1, { message: CreateOfferValidationMessage.roomsNumber.minValue })
+  @Max(8, { message: CreateOfferValidationMessage.roomsNumber.maxValue })
   public roomsNumber: number;
 
-  @IsInt()
-  @Min(1)
-  @Max(10)
+  @IsInt({ message: CreateOfferValidationMessage.guests.isInt })
+  @Min(1, { message: CreateOfferValidationMessage.guests.minValue })
+  @Max(10, { message: CreateOfferValidationMessage.guests.maxValue })
   public guests: number;
 
   @IsInt({ message: CreateOfferValidationMessage.price.invalidFormat })
@@ -77,8 +83,11 @@ export class CreateOfferDto {
   @Max(200000, { message: CreateOfferValidationMessage.price.maxValue })
   public price: number;
 
-  @IsArray()
-  @IsEnum(Services, { each: true })
+  @IsArray({ message: CreateOfferValidationMessage.services.isArray })
+  @IsEnum(Services, {
+    each: true,
+    message: CreateOfferValidationMessage.services.isEnum
+  })
   public services: Services[];
 
   @IsMongoId({ message: CreateOfferValidationMessage.authorId.invalidId })

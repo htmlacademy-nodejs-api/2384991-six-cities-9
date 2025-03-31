@@ -56,7 +56,12 @@ export class OfferController extends BaseController {
       handler: this.update,
       middlewares: [new ValidateObjectIdMiddleware('offerId'), new ValidateDtoMiddleware(UpdateOfferDto)]
     });
-    this.addRoute({ path: '/:offerId/comments', method: HttpMethod.Get, handler: this.getCommentsForOffer });
+    this.addRoute({
+      path: '/:offerId/comments',
+      method: HttpMethod.Get,
+      handler: this.getCommentsForOffer,
+      middlewares: [new ValidateObjectIdMiddleware('offerId')]
+    });
     this.addRoute({ path: '/premium/:city', method: HttpMethod.Get, handler: this.findPremiumByCity });
   }
 

@@ -6,6 +6,7 @@ import {
   IsInt,
   IsNumber,
   IsString,
+  IsUrl,
   Max,
   MaxLength,
   Min,
@@ -21,12 +22,17 @@ import { City, RoomType, Services } from '../../../types/index.js';
 
 export class LocationDto {
   @IsOptional()
-  @IsNumber()
-    latitude: number;
+  @IsNumber({}, { message: CreateUpdateOfferMessage.location.latitude })
+  @Min(-90, { message: CreateUpdateOfferMessage.location.latitude })
+  @Max(90, { message: CreateUpdateOfferMessage.location.latitude })
+  public latitude: number;
+ 
 
   @IsOptional()
-  @IsNumber()
-    longitude: number;
+  @IsNumber({}, { message: CreateUpdateOfferMessage.location.longitude })
+  @Min(-180, { message: CreateUpdateOfferMessage.location.longitude })
+  @Max(180, { message: CreateUpdateOfferMessage.location.longitude })
+  public  longitude: number;
 }
 
 export class UpdateOfferDto {
@@ -49,9 +55,10 @@ export class UpdateOfferDto {
   public city?: string;
 
   @IsOptional()
-  @IsString()
-  @MinLength(5)
-  public previewImage?: string;
+  @IsString({ message: CreateUpdateOfferMessage.previewImage.isNotEmpty })
+  @MinLength(5, { message: CreateUpdateOfferMessage.previewImage.isNotEmpty })
+  @IsUrl({}, { message: CreateUpdateOfferMessage.previewImage.isUrl })
+  public previewImage: string;
 
   @IsOptional()
   @IsArray({ message: CreateUpdateOfferMessage.images.isArray })
@@ -60,13 +67,13 @@ export class UpdateOfferDto {
   public images?: string[];
 
   @IsOptional()
-  @IsBoolean()
+  @IsBoolean({ message: CreateUpdateOfferMessage.isPremium.isBoolean })
   public isPremium?: boolean;
 
   @IsOptional()
-  @IsNumber()
-  @Min(1)
-  @Max(5)
+  @IsNumber({}, { message: CreateUpdateOfferMessage.rating.isNumber })
+  @Min(1, { message: CreateUpdateOfferMessage.rating.minValue })
+  @Max(5, { message: CreateUpdateOfferMessage.rating.maxValue })
   public rating?: number;
 
   @IsOptional()
@@ -74,15 +81,15 @@ export class UpdateOfferDto {
   public type?: RoomType;
 
   @IsOptional()
-  @IsInt()
-  @Min(1)
-  @Max(8)
+  @IsInt({ message: CreateUpdateOfferMessage.roomsNumber.isInt })
+  @Min(1, { message: CreateUpdateOfferMessage.roomsNumber.minValue })
+  @Max(8, { message: CreateUpdateOfferMessage.roomsNumber.maxValue })
   public roomsNumber?: number;
 
   @IsOptional()
-  @IsInt()
-  @Min(1)
-  @Max(10)
+  @IsInt({ message: CreateUpdateOfferMessage.guests.isInt })
+  @Min(1, { message: CreateUpdateOfferMessage.guests.minValue })
+  @Max(10, { message: CreateUpdateOfferMessage.guests.maxValue })
   public guests?: number;
 
   @IsOptional()
@@ -92,8 +99,11 @@ export class UpdateOfferDto {
   public price?: number;
 
   @IsOptional()
-  @IsArray()
-  @IsEnum(Services, { each: true })
+  @IsArray({ message: CreateUpdateOfferMessage.services.isArray })
+  @IsEnum(Services, {
+    each: true,
+    message: CreateUpdateOfferMessage.services.isEnum
+  })
   public services?: string[];
 
   @IsOptional()
