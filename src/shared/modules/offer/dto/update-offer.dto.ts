@@ -20,7 +20,7 @@ import { Type } from 'class-transformer';
 import { CreateUpdateOfferMessage } from './update-offer.messages.js';
 import { City, RoomType, Services } from '../../../types/index.js';
 
-export class LocationDto {
+export class LocationDTO {
   @IsOptional()
   @IsNumber({}, { message: CreateUpdateOfferMessage.location.latitude })
   @Min(-90, { message: CreateUpdateOfferMessage.location.latitude })
@@ -34,7 +34,7 @@ export class LocationDto {
   public longitude: number;
 }
 
-export class UpdateOfferDto {
+export class UpdateOfferDTO {
   @IsOptional()
   @MinLength(10, { message: CreateUpdateOfferMessage.offerName.minLength })
   @MaxLength(100, { message: CreateUpdateOfferMessage.offerName.maxLength })
@@ -107,6 +107,6 @@ export class UpdateOfferDto {
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => LocationDto)
-  public location?: LocationDto;
+  @Type(() => LocationDTO)
+  public location?: LocationDTO;
 }

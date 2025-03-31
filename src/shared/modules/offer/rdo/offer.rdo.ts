@@ -1,7 +1,7 @@
 import { Expose, Type } from 'class-transformer';
 import { UserRdo } from '../../user/rdo/user.rdo.js';
 
-class LocationRdo {
+class LocationRDO {
   @Expose()
     latitude: number;
 
@@ -9,7 +9,7 @@ class LocationRdo {
     longitude: number;
 }
 
-export class OfferRdo {
+export class OfferRDO {
   @Expose()
   public offerName: string;
 
@@ -57,6 +57,6 @@ export class OfferRdo {
   public commentCount: number;
 
   @Expose()
-  @Type(() => LocationRdo)
-  public location: LocationRdo;
+  @Type(() => LocationRDO)
+  public location: LocationRDO;
 }

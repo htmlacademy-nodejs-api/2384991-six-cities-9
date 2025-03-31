@@ -1,7 +1,7 @@
 import { IsMongoId, IsString, MinLength, MaxLength, IsInt } from 'class-validator';
 import { CreateCommentValidationMessage } from './create-comment.messages.js';
 
-export class CreateCommentDto {
+export class CreateCommentDTO {
   @IsString({ message: CreateCommentValidationMessage.text.invalidFormat })
   @MinLength(5, { message: CreateCommentValidationMessage.text.minLength })
   @MaxLength(1024, { message: CreateCommentValidationMessage.text.maxLength })

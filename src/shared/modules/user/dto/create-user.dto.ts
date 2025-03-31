@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 import { CreateUserValidationMessage } from './create-user.messages.js';
 
-export class CreateUserDto {
+export class CreateUserDTO {
   @IsEmail({}, { message: CreateUserValidationMessage.email.isEmail })
   public email: string;
 
