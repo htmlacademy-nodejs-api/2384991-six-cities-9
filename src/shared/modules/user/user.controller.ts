@@ -7,7 +7,9 @@ import {
   HttpMethod,
   ValidateDTOMiddleware,
   ValidateObjectIdMiddleware,
-  UploadFileMiddleware } from '../../libs/rest/index.js';
+  UploadFileMiddleware,
+  PrivateRouteMiddleware
+} from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { UserService } from './user-service.interface.js';
@@ -46,6 +48,12 @@ export class UserController extends BaseController {
       middlewares: [new ValidateDTOMiddleware(LoginUserDTO)]
     });
     this.addRoute({
+      path: '/login',
+      method: HttpMethod.Get,
+      handler: this.checkAuthenticate,
+      middlewares: [new PrivateRouteMiddleware()]
+    });
+    this.addRoute({
       path: '/:userId/avatar',
       method: HttpMethod.Post,
       handler: this.uploadAvatar,
@@ -81,5 +89,19 @@ export class UserController extends BaseController {
 
   public async uploadAvatar(req: Request, res: Response): Promise<void> {
     this.created(res, { filepath: req.file?.path });
+  }
+
+  public async checkAuthenticate({ tokenPayload: { email} }: Request, res: Response): Promise<void> {
+    const foundedUser = await this.userService.findByEmail(email);
+
+    if (!foundedUser) {
+      throw new HttpError(
+        StatusCodes.UNAUTHORIZED,
+        'Unauthorized',
+        'UserController'
+      );
+    }
+
+    this.ok(res, fillDTO(UserRdo, foundedUser));
   }
 }

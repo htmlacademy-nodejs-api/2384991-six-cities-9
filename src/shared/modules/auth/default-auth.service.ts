@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import * as crypto from 'crypto';
+import * as crypto from 'node:crypto';
 import { SignJWT } from 'jose';
 import { AuthService } from './auth-service.interface.js';
 import { Component } from '../../types/index.js';
@@ -41,12 +41,12 @@ export class DefaultAuthService implements AuthService {
   public async verify(dto: LoginUserDTO): Promise<UserEntity> {
     const user = await this.userService.findByEmail(dto.email);
     if (!user) {
-      this.logger.warn(`User with email ${dto.email} not found.`)
+      this.logger.warn(`User with email ${dto.email} not found.`);
       throw new UserNotFoundException();
     }
 
     if (!user.verifyPassword(dto.password, this.config.get('SALT'))) {
-      this.logger.warn(`Incorrect password for user with email ${dto.email}.`)
+      this.logger.warn(`Incorrect password for user with email ${dto.email}.`);
       throw new UserPasswordIncorrectException();
     }
 

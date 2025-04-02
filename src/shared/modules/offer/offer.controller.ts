@@ -7,7 +7,8 @@ import {
   HttpMethod,
   ValidateObjectIdMiddleware,
   ValidateDTOMiddleware,
-  DocumentExistsMiddleware
+  DocumentExistsMiddleware,
+  PrivateRouteMiddleware
 } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
@@ -37,7 +38,10 @@ export class OfferController extends BaseController {
       path: '/',
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateDTOMiddleware(CreateOfferDTO)]
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateDTOMiddleware(CreateOfferDTO)
+      ]
     });
     this.addRoute({
       path: '/:offerId',
@@ -49,13 +53,22 @@ export class OfferController extends BaseController {
       path: '/:offerId',
       method: HttpMethod.Delete,
       handler: this.delete,
-      middlewares: [new ValidateObjectIdMiddleware('offerId'), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')]
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
+      ]
     });
     this.addRoute({
       path: '/:offerId',
       method: HttpMethod.Patch,
       handler: this.update,
-      middlewares: [new ValidateObjectIdMiddleware('offerId'), new ValidateDTOMiddleware(UpdateOfferDTO), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')]
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateObjectIdMiddleware('offerId'),
+        new ValidateDTOMiddleware(UpdateOfferDTO),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
+      ]
     });
     this.addRoute({
       path: '/:offerId/comments',
@@ -71,8 +84,8 @@ export class OfferController extends BaseController {
     this.ok(res, fillDTO(OfferRDO, offers));
   }
 
-  public async create({ body }: CreateOfferRequest, res: Response): Promise<void> {
-    const existOffer = await this.offerService.findDuplicate(body);
+  public async create({ body, tokenPayload }: CreateOfferRequest, res: Response): Promise<void> {
+    const existOffer = await this.offerService.findDuplicate({...body, authorId: tokenPayload.id});
 
     if (existOffer) {
       throw new HttpError(
