@@ -18,13 +18,16 @@ import { CreateUserRequest } from './create-user-request.type.js';
 import { LoginUserRequest } from './login-user-request.type.js';
 import { CreateUserDTO } from './dto/create-user.dto.js';
 import { LoginUserDTO } from './dto/login-user.dto.js';
+import { AuthService } from '../auth/auth-service.interface.js';
+import { LoggedUserRDO } from './rdo/logger-user.rdo.js';
 
 @injectable()
 export class UserController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.UserService) private readonly userService: UserService,
-    @inject(Component.Config) private readonly config: Config<RestSchema>
+    @inject(Component.Config) private readonly config: Config<RestSchema>,
+    @inject(Component.AuthService) private readonly authService: AuthService
   ) {
     super(logger);
 
@@ -65,22 +68,15 @@ export class UserController extends BaseController {
     this.created(res, fillDTO(UserRdo, result));
   }
 
-  public async login({ body }: LoginUserRequest, _res: Response): Promise<void> {
-    const existsUser = await this.userService.findByEmail(body.email);
+  public async login({ body }: LoginUserRequest, res: Response): Promise<void> {
+    const user = await this.authService.verify(body);
+    const token = await this.authService.authenticate(user);
+    const responseData = fillDTO(LoggedUserRDO, {
+      email: user.email,
+      token
+    });
 
-    if (! existsUser) {
-      throw new HttpError(
-        StatusCodes.UNAUTHORIZED,
-        `User with email ${body.email} not found.`,
-        'UserController',
-      );
-    }
-
-    throw new HttpError(
-      StatusCodes.NOT_IMPLEMENTED,
-      'Login is not implemented yet.',
-      'UserController',
-    );
+    this.ok(res, responseData);
   }
 
   public async uploadAvatar(req: Request, res: Response): Promise<void> {
