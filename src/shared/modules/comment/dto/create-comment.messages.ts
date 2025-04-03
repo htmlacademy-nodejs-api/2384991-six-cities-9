@@ -11,7 +11,7 @@ export const CreateCommentValidationMessage = {
   offerId: {
     invalidId: 'offerId field must be a valid id',
   },
-  authorId: {
-    invalidId: 'authorId field must be a valid id',
+  userId: {
+    invalidId: 'userId field must be a valid id',
   },
 } as const;

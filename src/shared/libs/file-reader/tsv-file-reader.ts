@@ -59,7 +59,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       guests: this.parseNumber(guests),
       price: this.parseNumber(price),
       services: this.parseArray(services).map((service) => Services[service as keyof typeof Services]),
-      author: parsedAuthor,
+      user: parsedAuthor,
       commentsNumber: this.parseNumber(commentsNumber),
       location: {
         longitude: this.parseNumber(longitude),

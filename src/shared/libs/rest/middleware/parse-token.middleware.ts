@@ -11,8 +11,6 @@ function isTokenPayload(payload: unknown): payload is TokenPayload {
   return (
     (typeof payload === 'object' && payload !== null) &&
     ('email' in payload && typeof payload.email === 'string') &&
-    ('name' in payload && typeof payload.name === 'string') &&
-    ('userType' in payload && typeof payload.userType === 'string') &&
     ('id' in payload && typeof payload.id === 'string')
   );
 }
@@ -32,10 +30,10 @@ export class ParseTokenMiddleware implements Middleware {
       const { payload } = await jwtVerify(token, createSecretKey(this.jwtSecret, 'utf-8'));
 
       if (isTokenPayload(payload)) {
-        req.tokenPayload = { ...payload };
+        req.tokenPayload = payload;
         return next();
       } else {
-        throw new Error('Bad token');
+        throw new Error('Token payload does not match expected structure.');
       }
     } catch {
 

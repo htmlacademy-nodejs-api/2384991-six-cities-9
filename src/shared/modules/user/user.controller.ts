@@ -8,11 +8,13 @@ import {
   ValidateDTOMiddleware,
   ValidateObjectIdMiddleware,
   UploadFileMiddleware,
-  PrivateRouteMiddleware
+  PrivateRouteMiddleware,
+  DocumentExistsMiddleware
 } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { UserService } from './user-service.interface.js';
+import { OfferService } from '../offer/index.js';
 import { Config, RestSchema } from '../../libs/config/index.js';
 import { fillDTO } from '../../helpers/common.js';
 import { UserRdo } from './rdo/user.rdo.js';
@@ -22,6 +24,8 @@ import { CreateUserDTO } from './dto/create-user.dto.js';
 import { LoginUserDTO } from './dto/login-user.dto.js';
 import { AuthService } from '../auth/auth-service.interface.js';
 import { LoggedUserRDO } from './rdo/logger-user.rdo.js';
+import { OfferRDO } from '../offer/index.js';
+import { ParamOfferId } from '../offer/type/param-offerid.type.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -29,7 +33,8 @@ export class UserController extends BaseController {
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.UserService) private readonly userService: UserService,
     @inject(Component.Config) private readonly config: Config<RestSchema>,
-    @inject(Component.AuthService) private readonly authService: AuthService
+    @inject(Component.AuthService) private readonly authService: AuthService,
+    @inject(Component.OfferService) private readonly offerService: OfferService
   ) {
     super(logger);
 
@@ -58,6 +63,32 @@ export class UserController extends BaseController {
       method: HttpMethod.Post,
       handler: this.uploadAvatar,
       middlewares: [new ValidateObjectIdMiddleware('userId'), new UploadFileMiddleware(this.config.get('UPLOAD_DIRECTORY'), 'avatar'),]
+    });
+    this.addRoute({
+      path: '/me/favorites',
+      method: HttpMethod.Get,
+      handler: this.getFavorites,
+      middlewares: [new PrivateRouteMiddleware()]
+    });
+    this.addRoute({
+      path: '/me/favorites/:offerId',
+      method: HttpMethod.Post,
+      handler: this.addToFavorites,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
+      ]
+    });
+    this.addRoute({
+      path: '/me/favorites/:offerId',
+      method: HttpMethod.Delete,
+      handler: this.removeFromFavorites,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
+      ]
     });
   }
 
@@ -103,5 +134,30 @@ export class UserController extends BaseController {
     }
 
     this.ok(res, fillDTO(UserRdo, foundedUser));
+  }
+
+  public async getFavorites({ tokenPayload }: Request, res: Response): Promise<void> {
+    const favorites = await this.userService.findFavorites(tokenPayload.id);
+
+    const offersWithFlag = favorites.map((offer) => ({
+      ...offer.toObject(),
+      isFavorite: true
+    }));
+
+    this.ok(res, fillDTO(OfferRDO, offersWithFlag));
+  }
+
+  public async addToFavorites({ params, tokenPayload }: Request<ParamOfferId>, res: Response): Promise<void> {
+    const { offerId } = params;
+    const result = await this.userService.addFavorite(tokenPayload.id, offerId);
+
+    this.noContent(res, result);
+  }
+
+  public async removeFromFavorites({ params, tokenPayload }: Request<ParamOfferId>, res: Response): Promise<void> {
+    const { offerId } = params;
+    const result = await this.userService.removeFavorite(tokenPayload.id, offerId);
+
+    this.noContent(res, result);
   }
 }

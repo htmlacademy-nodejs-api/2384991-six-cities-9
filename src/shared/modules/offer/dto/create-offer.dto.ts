@@ -89,7 +89,7 @@ export class CreateOfferDTO {
   })
   public services: Services[];
 
-  public authorId: string;
+  public userId: string;
 
   @IsInt()
   @Min(0)

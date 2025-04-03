@@ -32,6 +32,9 @@ export class OfferRDO {
   public isPremium: boolean;
 
   @Expose()
+  public isFavorite: boolean;
+
+  @Expose()
   public rating: number;
 
   @Expose()
@@ -49,9 +52,9 @@ export class OfferRDO {
   @Expose()
   public services: string[];
 
-  @Expose({ name: 'authorId' })
+  @Expose({ name: 'userId' })
   @Type(() => UserRdo)
-  public author: UserRdo;
+  public user: UserRdo;
 
   @Expose()
   public commentCount: number;

@@ -53,8 +53,8 @@ export const CreateOfferValidationMessage = {
     isArray: 'services must be an array',
     isEnum: 'Each service must be a valid enum value',
   },
-  authorId: {
-    invalidId: 'authorId field must be a valid id',
+  userId: {
+    invalidId: 'userId field must be a valid id',
   },
   location: {
     latitude: 'latitude must be a valid number between -90 and 90',

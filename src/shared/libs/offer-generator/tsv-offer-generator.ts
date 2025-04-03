@@ -20,7 +20,7 @@ export class TSVOfferGenerator implements OfferGenerator {
     const guests = generateRandomValue(OFFER_LIMITS.GUESTS.MIN, OFFER_LIMITS.GUESTS.MAX);
     const price = generateRandomValue(OFFER_LIMITS.PRICE.MIN, OFFER_LIMITS.PRICE.MAX);
     const services = getRandomItems(this.mockData.services);
-    const author = getRandomItem(this.mockData.users);
+    const user = getRandomItem(this.mockData.users);
     const email = getRandomItem(this.mockData.emails);
     const password = getRandomItem(this.mockData.passwords);
     const avatarPath = getRandomItem(this.mockData.avatarPaths);
@@ -46,7 +46,7 @@ export class TSVOfferGenerator implements OfferGenerator {
       guests,
       price,
       services,
-      author,
+      user,
       email,
       password,
       avatarPath,

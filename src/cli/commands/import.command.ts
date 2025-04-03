@@ -45,10 +45,10 @@ export class ImportCommand implements Command {
 
   private async saveOffer(offer: Offer, salt: string): Promise<void> {
     try {
-      const userData = { ...offer.author, password: DEFAULT_USER_PASSWORD };
+      const userData = { ...offer.user, password: DEFAULT_USER_PASSWORD };
       const user = await this.userService.findOrCreate(userData, salt);
 
-      const offerData = { ...offer, authorId: user._id.toString() };
+      const offerData = { ...offer, userId: user._id.toString() };
       await this.offerService.create(offerData);
 
       this.logger.info(`Offer "${offer.offerName}" successfully saved.`);
