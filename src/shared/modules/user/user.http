@@ -5,10 +5,11 @@ POST http://localhost:4000/users/register HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "torans@overlook.net",
+  "email": "test@gmail.com",
   "avatarPath": "torrance.png",
   "name": "Jack Sparrow",
-  "password": "shining"
+  "password": "shining",
+  "userType": "standard"
 }
 
 ###
@@ -19,7 +20,7 @@ POST http://localhost:4000/users/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "torans@overlook.net",
+  "email": "test@gmail.com",
   "password": "shining"
 }
 
@@ -37,4 +38,30 @@ Content-Type: image/webp
 < Downloads/editor_image_40.webp
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
-##
+###
+
+## Check user token
+GET http://localhost:4000/users/login HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJuYW1lIjoiSmFjayBTcGFycm93IiwidXNlclR5cGUiOiJzdGFuZGFyZCIsImlkIjoiNjdlNTFlODVjZGRjZWU5ZmYzNDc2NTJhIiwiaWF0IjoxNzQzNjY0ODU2LCJleHAiOjE3NDM4Mzc2NTZ9.iM3ZErYTIzoKjviJu-34SSx-tgHu56MRlGOcq0ALq6A
+
+###
+
+## Favorites list for user
+
+GET http://localhost:4000/users/me/favorites
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJuYW1lIjoiSmFjayBTcGFycm93IiwidXNlclR5cGUiOiJzdGFuZGFyZCIsImlkIjoiNjdlNTFlODVjZGRjZWU5ZmYzNDc2NTJhIiwiaWF0IjoxNzQzNjY0ODU2LCJleHAiOjE3NDM4Mzc2NTZ9.iM3ZErYTIzoKjviJu-34SSx-tgHu56MRlGOcq0ALq6A
+
+###
+
+## Add offer to favorites
+POST http://localhost:4000/users/me/favorites/67ee37fa6c5de8379aff39df
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJuYW1lIjoiSmFjayBTcGFycm93IiwidXNlclR5cGUiOiJzdGFuZGFyZCIsImlkIjoiNjdlNTFlODVjZGRjZWU5ZmYzNDc2NTJhIiwiaWF0IjoxNzQzNjY0ODU2LCJleHAiOjE3NDM4Mzc2NTZ9.iM3ZErYTIzoKjviJu-34SSx-tgHu56MRlGOcq0ALq6A
+
+### 
+
+## Remove offer from favorites
+
+DELETE http://localhost:4000/users/me/favorites/67ee37fa6c5de8379aff39df
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJuYW1lIjoiSmFjayBTcGFycm93IiwidXNlclR5cGUiOiJzdGFuZGFyZCIsImlkIjoiNjdlNTFlODVjZGRjZWU5ZmYzNDc2NTJhIiwiaWF0IjoxNzQzNjY0ODU2LCJleHAiOjE3NDM4Mzc2NTZ9.iM3ZErYTIzoKjviJu-34SSx-tgHu56MRlGOcq0ALq6A
+
+###

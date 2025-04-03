@@ -63,7 +63,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
     ref: () => UserEntity,
     required: true
   })
-  public authorId!: Ref<UserEntity>;
+  public userId!: Ref<UserEntity>;
 
   @prop({ default: 0 })
   public commentCount: number;
@@ -89,7 +89,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
     this.guests = offerData.guests;
     this.price = offerData.price;
     this.services = offerData.services;
-    this.author = offerData.author;
+    this.user = offerData.user;
     this.commentCount = offerData.commentCount;
     this.location = offerData.location;
   } */

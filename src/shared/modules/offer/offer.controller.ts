@@ -7,7 +7,8 @@ import {
   HttpMethod,
   ValidateObjectIdMiddleware,
   ValidateDTOMiddleware,
-  DocumentExistsMiddleware
+  DocumentExistsMiddleware,
+  PrivateRouteMiddleware
 } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
@@ -18,6 +19,7 @@ import { OfferRDO } from './rdo/offer.rdo.js';
 import { CreateOfferRequest } from './create-offer-request.type.js';
 import { CommentRDO } from '../comment/rdo/comment.rdo.js';
 import { CommentService } from '../comment/index.js';
+import { UserService } from '../user/user-service.interface.js';
 import { CreateOfferDTO } from './dto/create-offer.dto.js';
 import { UpdateOfferDTO } from './dto/update-offer.dto.js';
 
@@ -26,7 +28,8 @@ export class OfferController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.OfferService) private readonly offerService: OfferService,
-    @inject(Component.CommentService) private readonly commentService: CommentService
+    @inject(Component.CommentService) private readonly commentService: CommentService,
+    @inject(Component.UserService) private readonly userService: UserService
   ) {
     super(logger);
 
@@ -37,7 +40,10 @@ export class OfferController extends BaseController {
       path: '/',
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateDTOMiddleware(CreateOfferDTO)]
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateDTOMiddleware(CreateOfferDTO)
+      ]
     });
     this.addRoute({
       path: '/:offerId',
@@ -49,13 +55,22 @@ export class OfferController extends BaseController {
       path: '/:offerId',
       method: HttpMethod.Delete,
       handler: this.delete,
-      middlewares: [new ValidateObjectIdMiddleware('offerId'), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')]
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
+      ]
     });
     this.addRoute({
       path: '/:offerId',
       method: HttpMethod.Patch,
       handler: this.update,
-      middlewares: [new ValidateObjectIdMiddleware('offerId'), new ValidateDTOMiddleware(UpdateOfferDTO), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')]
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateObjectIdMiddleware('offerId'),
+        new ValidateDTOMiddleware(UpdateOfferDTO),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
+      ]
     });
     this.addRoute({
       path: '/:offerId/comments',
@@ -66,13 +81,27 @@ export class OfferController extends BaseController {
     this.addRoute({ path: '/premium/:city', method: HttpMethod.Get, handler: this.findPremiumByCity });
   }
 
-  public async index(_req: Request, res: Response): Promise<void> {
+  public async index({ tokenPayload }: Request, res: Response): Promise<void> {
     const offers = await this.offerService.findOfferList();
-    this.ok(res, fillDTO(OfferRDO, offers));
+    const userId = tokenPayload?.id;
+
+    let favoriteOfferIds: Set<string> = new Set();
+
+    if (userId) {
+      const favorites = await this.userService.findFavorites(userId);
+      favoriteOfferIds = new Set(favorites.map((offer) => offer.id.toString()));
+    }
+
+    const offersWithFavorites = offers.map((offer) => ({
+      ...offer.toObject(),
+      isFavorite: favoriteOfferIds.has(offer.id.toString())
+    }));
+
+    this.ok(res, fillDTO(OfferRDO, offersWithFavorites));
   }
 
-  public async create({ body }: CreateOfferRequest, res: Response): Promise<void> {
-    const existOffer = await this.offerService.findDuplicate(body);
+  public async create({ body, tokenPayload }: CreateOfferRequest, res: Response): Promise<void> {
+    const existOffer = await this.offerService.findDuplicate({...body, userId: tokenPayload.id});
 
     if (existOffer) {
       throw new HttpError(
@@ -82,7 +111,7 @@ export class OfferController extends BaseController {
       );
     }
 
-    const result = await this.offerService.create(body);
+    const result = await this.offerService.create({...body, userId: tokenPayload.id});
     this.created(res, fillDTO(OfferRDO, result));
   }
 

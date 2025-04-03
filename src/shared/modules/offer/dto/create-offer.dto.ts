@@ -4,7 +4,6 @@ import {
   IsDateString,
   IsEnum,
   IsInt,
-  IsMongoId,
   IsNumber,
   IsString,
   IsUrl,
@@ -90,8 +89,7 @@ export class CreateOfferDTO {
   })
   public services: Services[];
 
-  @IsMongoId({ message: CreateOfferValidationMessage.authorId.invalidId })
-  public authorId: string;
+  public userId: string;
 
   @IsInt()
   @Min(0)

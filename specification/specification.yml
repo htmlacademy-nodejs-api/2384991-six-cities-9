@@ -434,7 +434,7 @@ components:
         rating:
           type: integer
           example: 5
-        author:
+        user:
           type: object
           properties:
             id:

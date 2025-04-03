@@ -13,3 +13,5 @@ export { ValidateDTOMiddleware } from './middleware/validate-dto.middleware.js';
 export { DocumentExists } from './types/document-exists.interface.js';
 export { DocumentExistsMiddleware } from './middleware/document-exists.middleware.js';
 export { UploadFileMiddleware } from './middleware/upload-file.middleware.js';
+export { ParseTokenMiddleware } from './middleware/parse-token.middleware.js';
+export { PrivateRouteMiddleware } from './middleware/private-route.middleware.js';

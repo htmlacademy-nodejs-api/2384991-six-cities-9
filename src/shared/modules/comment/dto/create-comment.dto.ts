@@ -13,6 +13,6 @@ export class CreateCommentDTO {
   @IsMongoId({ message: CreateCommentValidationMessage.offerId.invalidId })
   public offerId: string;
 
-  @IsMongoId({ message: CreateCommentValidationMessage.authorId.invalidId })
-  public authorId: string;
+  @IsMongoId({ message: CreateCommentValidationMessage.userId.invalidId })
+  public userId: string;
 }
