@@ -26,3 +26,4 @@ export const createErrorObject = (errorType: ApplicationError, error: string, de
 export const reduceValidationErrors = (errors: ValidationError[]): ValidationErrorField[] =>
   errors.map(({ property, value, constraints }) => ({ property, value, messages: constraints ? Object.values(constraints) : [] }));
 
+export const getFullServerPath = (host: string, port: number) => `http://${host}:${port}`;
