@@ -3,7 +3,7 @@ import multer, { diskStorage } from 'multer';
 import { extension } from 'mime-types';
 import * as crypto from 'node:crypto';
 import { Middleware } from './middleware.interface.js';
-import { HttpError } from '../errors/http-error.js';
+import { HttpError } from '../errors/index.js';
 import { StatusCodes } from 'http-status-codes';
 
 export class UploadFileMiddleware implements Middleware {
