@@ -6,6 +6,7 @@ import { CreateUserDTO } from './dto/create-user.dto.js';
 import { Component } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { OfferEntity } from '../offer/index.js';
+import { DEFAULT_AVATAR_FILE_NAME } from './dto/user.constants.js';
 
 @injectable()
 export class DefaultUserService implements UserService {
@@ -15,7 +16,7 @@ export class DefaultUserService implements UserService {
   ) {}
 
   public async create(dto: CreateUserDTO, salt: string): Promise<DocumentType<UserEntity>> {
-    const user = new UserEntity(dto);
+    const user = new UserEntity({...dto, avatarPath: DEFAULT_AVATAR_FILE_NAME});
     user.setPassword(dto.password, salt);
 
     const result = await this.userModel.create(user);
