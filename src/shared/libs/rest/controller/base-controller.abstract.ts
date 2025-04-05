@@ -4,7 +4,7 @@ import { Response, Router } from 'express';
 import asyncHandler from 'express-async-handler';
 import { Controller } from './controller.interface.js';
 import { Logger } from '../../logger/index.js';
-import { Route } from '../types/route.interface.js';
+import { Route } from '../types/index.js';
 
 @injectable()
 export abstract class BaseController implements Controller {
