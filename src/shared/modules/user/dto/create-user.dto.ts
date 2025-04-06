@@ -16,12 +16,9 @@ export class CreateUserDTO {
   @MaxLength(15, { message: CreateUserValidationMessage.name.lengthField })
   public name: string;
 
-  @IsString({ message: CreateUserValidationMessage.avatarPath.required })
-  public avatarPath: string;
-
   @IsString({ message: CreateUserValidationMessage.password.required })
   @MinLength(6, { message: CreateUserValidationMessage.password.lengthField })
-  @MaxLength(15, { message: CreateUserValidationMessage.password.lengthField })
+  @MaxLength(12, { message: CreateUserValidationMessage.password.lengthField })
   public password: string;
 
   @IsIn(['standard', 'pro'], { message: CreateUserValidationMessage.userType.isUserType })

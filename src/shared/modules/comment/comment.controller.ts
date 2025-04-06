@@ -2,11 +2,11 @@ import { inject, injectable } from 'inversify';
 import { Response } from 'express';
 import {
   BaseController,
-  HttpMethod,
   ValidateDTOMiddleware,
   DocumentExistsMiddleware,
   PrivateRouteMiddleware
 } from '../../libs/rest/index.js';
+import { HttpMethod } from '../../libs/rest/types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { CommentService } from './comment-service.interface.js';

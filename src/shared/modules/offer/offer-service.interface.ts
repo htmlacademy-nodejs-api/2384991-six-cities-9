@@ -1,6 +1,6 @@
 import { DocumentType } from '@typegoose/typegoose';
 import { OfferEntity, CreateOfferDTO } from './index.js';
-import { DocumentExists } from '../../libs/rest/index.js';
+import { DocumentExists } from '../../libs/rest/types/index.js';
 
 export interface OfferService extends DocumentExists {
   create(dto: CreateOfferDTO): Promise<DocumentType<OfferEntity>>;

@@ -3,14 +3,14 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import {
   BaseController,
-  HttpError,
-  HttpMethod,
   ValidateDTOMiddleware,
   ValidateObjectIdMiddleware,
   UploadFileMiddleware,
   PrivateRouteMiddleware,
   DocumentExistsMiddleware
 } from '../../libs/rest/index.js';
+import { HttpError } from '../../libs/rest/errors/index.js';
+import { HttpMethod } from '../../libs/rest/types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { UserService } from './user-service.interface.js';
@@ -26,6 +26,7 @@ import { AuthService } from '../auth/auth-service.interface.js';
 import { LoggedUserRDO } from './rdo/logger-user.rdo.js';
 import { OfferRDO } from '../offer/index.js';
 import { ParamOfferId } from '../offer/type/param-offerid.type.js';
+import { UploadUserAvatarRDO } from './rdo/upload-user-avatar.rdo.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -110,16 +111,16 @@ export class UserController extends BaseController {
   public async login({ body }: LoginUserRequest, res: Response): Promise<void> {
     const user = await this.authService.verify(body);
     const token = await this.authService.authenticate(user);
-    const responseData = fillDTO(LoggedUserRDO, {
-      email: user.email,
-      token
-    });
+    const responseData = fillDTO(LoggedUserRDO, user);
 
-    this.ok(res, responseData);
+    this.ok(res, Object.assign(responseData, { token }));
   }
 
-  public async uploadAvatar(req: Request, res: Response): Promise<void> {
-    this.created(res, { filepath: req.file?.path });
+  public async uploadAvatar({ params, file }: Request, res: Response) {
+    const { userId } = params;
+    const uploadFile = { avatarPath: file?.filename };
+    await this.userService.updateById(userId, uploadFile);
+    this.created(res, fillDTO(UploadUserAvatarRDO, { filepath: uploadFile.avatarPath }));
   }
 
   public async checkAuthenticate({ tokenPayload: { email} }: Request, res: Response): Promise<void> {
