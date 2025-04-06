@@ -74,7 +74,7 @@ paths:
         "401":
           description: User is not authenticated
 
-  /users/me/avatar:
+  /users/{userId}/avatar:
     post:
       tags:
         - users
@@ -162,7 +162,7 @@ paths:
         "404":
           description: Offer not found
 
-  /offers/{offerId}/edit:
+  /offers/{offerId}:
     patch:
       tags:
         - offers
@@ -185,7 +185,7 @@ paths:
         "404":
           description: Offer not found
 
-  /offers/{offerId}/delete:
+  /offers/{offerId}:
     delete:
       tags:
         - offers
@@ -266,13 +266,16 @@ paths:
         "404":
           description: Offer not found
 
+  /comments:
     post:
       tags:
         - comments
       summary: Add comment to offer
       description: Add comment to a specific offer (authorized users only)
+      security:
+        - bearerAuth: []
       requestBody:
-        description: Comment data to add
+        description: Comment data to add (offerId передаётся в теле запроса)
         required: true
         content:
           application/json:
@@ -291,7 +294,6 @@ paths:
           description: Unauthorized. Token required.
         "404":
           description: Offer not found
-
 components:
   schemas:
     createUser:

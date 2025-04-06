@@ -18,7 +18,7 @@ export class CreateUserDTO {
 
   @IsString({ message: CreateUserValidationMessage.password.required })
   @MinLength(6, { message: CreateUserValidationMessage.password.lengthField })
-  @MaxLength(15, { message: CreateUserValidationMessage.password.lengthField })
+  @MaxLength(12, { message: CreateUserValidationMessage.password.lengthField })
   public password: string;
 
   @IsIn(['standard', 'pro'], { message: CreateUserValidationMessage.userType.isUserType })

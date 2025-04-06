@@ -115,23 +115,57 @@ export class OfferController extends BaseController {
     this.created(res, fillDTO(OfferRDO, result));
   }
 
-  public async show({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
+  public async show({ params, tokenPayload }: Request<ParamOfferId>, res: Response): Promise<void> {
     const { offerId } = params;
     const offer = await this.offerService.findById(offerId);
 
-    this.ok(res, fillDTO(OfferRDO, offer));
+    let isFavorite = false;
+
+    if (tokenPayload?.id) {
+      const favorites = await this.userService.findFavorites(tokenPayload.id);
+      isFavorite = favorites.some((fav) => fav.id.toString() === offer?.id.toString());
+    }
+
+    const response = {
+      ...offer?.toObject(),
+      isFavorite,
+    };
+
+    this.ok(res, fillDTO(OfferRDO, response));
   }
 
-  public async update({ params, body }: Request<ParamOfferId>, res: Response): Promise<void> {
+  public async update({ params, body, tokenPayload }: Request<ParamOfferId>, res: Response): Promise<void> {
     const { offerId } = params;
+
+    const offer = await this.offerService.findById(offerId);
+
+    if (offer?.userId?.toString() !== tokenPayload.id) {
+      throw new HttpError(
+        StatusCodes.FORBIDDEN,
+        'You cannot update someone else\'s offer.',
+        'OfferController'
+      );
+    }
+
     const updatedOffer = await this.offerService.updateById(offerId, body);
 
     this.ok(res, fillDTO(OfferRDO, updatedOffer));
   }
 
-  public async delete({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
+  public async delete({ params, tokenPayload }: Request<ParamOfferId>, res: Response): Promise<void> {
     const { offerId } = params;
-    const offer = await this.offerService.deleteById(offerId);
+    const offer = await this.offerService.findById(offerId);
+
+    if (offer?.userId?.toString() !== tokenPayload.id) {
+      throw new HttpError(
+        StatusCodes.FORBIDDEN,
+        'You cannot delete someone else\'s offer.',
+        'OfferController'
+      );
+    }
+
+    await this.commentService.deleteByOfferId(offerId);
+    await this.offerService.deleteById(offerId);
 
     this.noContent(res, offer);
   }
