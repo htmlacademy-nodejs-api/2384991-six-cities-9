@@ -6,8 +6,6 @@ import { STATIC_FILES_ROUTE, STATIC_UPLOAD_ROUTE } from '../../../../rest/index.
 import { getFullServerPath } from '../../../helpers/index.js';
 import { Config, RestSchema } from '../../config/index.js';
 
-const isObject = (value: unknown): value is Record<string, object> => typeof value === 'object' && value !== null;
-
 @injectable()
 export class PathTransformer {
   constructor(
@@ -25,6 +23,10 @@ export class PathTransformer {
     return STATIC_RESOURCE_FIELDS.includes(property);
   }
 
+  private isObject(value: unknown): value is Record<string, object> {
+    return typeof value === 'object' && value !== null;
+  }
+
   public execute(data: Record<string, unknown>): Record<string, unknown> {
     const stack = [data];
     while (stack.length > 0) {
@@ -34,7 +36,7 @@ export class PathTransformer {
         if (Object.hasOwn(current, key)) {
           const value = current[key];
 
-          if (isObject(value)) {
+          if (this.isObject(value)) {
             stack.push(value);
             continue;
           }
@@ -46,7 +48,7 @@ export class PathTransformer {
             const serverPort = this.config.get('PORT');
 
             const rootPath = this.hasDefaultImage(value) ? staticPath : uploadPath;
-            current[key] = `${getFullServerPath(serverHost, serverPort)}/${rootPath}/${value}`;
+            current[key] = `${getFullServerPath(serverHost, serverPort)}${rootPath}/${value}`;
           }
         }
       }

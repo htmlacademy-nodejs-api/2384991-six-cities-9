@@ -1,5 +1,5 @@
 import { DocumentType } from '@typegoose/typegoose';
-import { UserEntity, CreateUserDTO } from './index.js';
+import { UserEntity, CreateUserDTO, UpdateUserDTO } from './index.js';
 import { OfferEntity } from '../offer/index.js';
 
 export interface UserService {
@@ -10,5 +10,5 @@ export interface UserService {
   findFavorites(userId: string): Promise<DocumentType<OfferEntity>[]>;
   addFavorite(userId: string, offerId: string): Promise<void>;
   removeFavorite(userId: string, offerId: string): Promise<void>;
-  updateById(id: string, dto: CreateUserDTO): Promise<DocumentType<UserEntity> | null>;
+  updateById(id: string, dto: UpdateUserDTO): Promise<DocumentType<UserEntity> | null>;
 }
