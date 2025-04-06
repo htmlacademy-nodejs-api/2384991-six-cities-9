@@ -3,13 +3,13 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import {
   BaseController,
-  HttpError,
-  HttpMethod,
   ValidateObjectIdMiddleware,
   ValidateDTOMiddleware,
   DocumentExistsMiddleware,
   PrivateRouteMiddleware
 } from '../../libs/rest/index.js';
+import { HttpError } from '../../libs/rest/errors/index.js';
+import { HttpMethod } from '../../libs/rest/types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { OfferService } from './offer-service.interface.js';
