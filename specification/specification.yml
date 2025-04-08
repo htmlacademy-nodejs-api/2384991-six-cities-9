@@ -162,7 +162,6 @@ paths:
         "404":
           description: Offer not found
 
-  /offers/{offerId}:
     patch:
       tags:
         - offers
@@ -185,7 +184,6 @@ paths:
         "404":
           description: Offer not found
 
-  /offers/{offerId}:
     delete:
       tags:
         - offers
